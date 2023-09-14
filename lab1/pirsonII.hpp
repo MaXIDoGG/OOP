@@ -10,4 +10,3 @@ double Xgenerate(double v);
 double dispersion(double v, double lam);
 double densityM(double x, double v);
 double density(double x, double v, double u, double lam);
-int main();
