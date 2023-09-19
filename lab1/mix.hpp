@@ -9,4 +9,5 @@ double mathexpMix(double p, double v1, double u1, double lam1, double v2, double
 double dispersionMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2);
 double asymmetryMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2);
 double excesMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2);
+double generateMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2);
 void testMix();

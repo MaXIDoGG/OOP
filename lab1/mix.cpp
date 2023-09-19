@@ -70,6 +70,13 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
     return result;
 }
 
+//Моделирование случайной величины
+double generateMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
+    double r = Rgenerate();
+    if (r > p) return Xgenerate(v1);
+    else return Xgenerate(v2);
+}
+
 void testMix() {
     //x = 0, p = 0.5, u1 = u2 = 1, v1 = v2 = 0.5, lam1 = lam2 = 2
     assert(fabs(densityMix(0, 0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.275668) < 0.001);
