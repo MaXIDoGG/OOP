@@ -1,7 +1,3 @@
-//
-// Created by Salena Sarella on 15.09.2023.
-//
-
 #include "empirical.h"
 #include <math.h>
 #include <vector>
@@ -20,7 +16,7 @@ int absolute_frequency(const vector<double>& sample, double min, double max) //�
 }
 
 double empirical_density(double x, const vector<double>& sample) { // эмпирическое распределение
-    int N = sample.size();
+    int N = int(sample.size());
     double Xmin = *min_element(sample.begin(), sample.end()); // мин. элем. выборки
     double Xmax = *max_element(sample.begin(), sample.end()); // макс. элем. выборки
     double range = Xmax - Xmin; // диапазон

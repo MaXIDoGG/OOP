@@ -1,8 +1,6 @@
-//
-// Created by Salena Sarella on 15.09.2023.
-//
+#include <iostream>
+#include <vector>
+using namespace std;
 
-#ifndef UNTITLED_EMPIRICAL_H
-#define UNTITLED_EMPIRICAL_H
-
-#endif //UNTITLED_EMPIRICAL_H
+int absolute_frequency(const vector<double>& sample, double min, double max);
+double empirical_density(double x, const vector<double>& sample);
