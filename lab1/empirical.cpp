@@ -37,8 +37,50 @@ double empirical_density(double x, const vector<double>& sample) { // эмпир
         }
         rangeMin = rangeMax;
         rangeMax += h;
-
     }
     return fx;
+}
+
+double math_expectation(const vector<double>& sample) {
+    int n = int(sample.size());
+    double sum = 0;
+    for (int i=0; i < n; i++) {
+        sum += sample[i];
+    }
+    return sum/n;
+}
+
+double dispersion(const vector<double>& sample) {
+    int n = int(sample.size());
+    double M = math_expectation(sample);
+    double sum = 0;
+    for (int i=0; i < n; i++) {
+        sum += pow((sample[i] - M), 2);
+    }
+    return sum/n;
+}
+
+double asymmetry(const vector<double>& sample) {
+    int n = int(sample.size());
+    double M = math_expectation(sample);
+    double D = dispersion(sample);
+    double sum = 0;
+    for (int i=0; i < n; i++) {
+        sum += pow((sample[i] - M), 3);
+    }
+    sum = sum/(n * pow(D, 1.5));
+    return sum;
+}
+
+double excess(const vector<double>& sample) {
+    int n = int(sample.size());
+    double M = math_expectation(sample);
+    double D = dispersion(sample);
+    double sum = 0;
+    for (int i=0; i < n; i++) {
+        sum += pow((sample[i] - M), 4);
+    }
+    sum = (sum/(n * pow(D, 2 ))) - 3;
+    return sum;
 }
 
