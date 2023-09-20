@@ -15,8 +15,8 @@ double densityMix(double x, double p, double v1, double u1, double lam1, double 
 
 //Ф-ия мат. ожидания
 double mathexpMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
-    double mathExp1 = mathexp(-1, 1, v1, u1, lam1);
-    double mathExp2 = mathexp(-1, 1, v2, u2, lam2);
+    double mathExp1 = mathexp(v1, u1, lam1, 1);
+    double mathExp2 = mathexp(v2, u2, lam2, 1);
     double result = (1 - p) * mathExp1 + p * mathExp2;
     return result;
 }
@@ -24,8 +24,8 @@ double mathexpMix(double p, double v1, double u1, double lam1, double v2, double
 //Ф-ия Дисперсии
 double dispersionMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
-    double mathExp1 = mathexp(-1, 1, v1, u1, lam1);
-    double mathExp2 = mathexp(-1, 1, v2, u2, lam2);
+    double mathExp1 = mathexp(v1, u1, lam1, 1);
+    double mathExp2 = mathexp(v2, u2, lam2, 1);
     double dispersion1 = dispersion(v1, lam1);
     double dispersion2 = dispersion(v2, lam2);
     double result = (1 - p) * (pow(mathExp1, 2) + dispersion1) + p * (pow(mathExp2, 2) + dispersion2) - pow(mathExpMix, 2); 
@@ -35,8 +35,8 @@ double dispersionMix(double p, double v1, double u1, double lam1, double v2, dou
 //Коэф. асимметрии
 double asymmetryMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
-    double mathExp1 = mathexp(-1, 1, v1, u1, lam1);
-    double mathExp2 = mathexp(-1, 1, v2, u2, lam2);
+    double mathExp1 = mathexp(v1, u1, lam1, 1);
+    double mathExp2 = mathexp(v2, u2, lam2, 1);
     double dispersion1 = dispersion(v1, lam1);
     double dispersion2 = dispersion(v2, lam2);
     double dispersionMixx = dispersionMix(p, v1, u1, lam1, v2, u2, lam2);
@@ -52,8 +52,8 @@ double asymmetryMix(double p, double v1, double u1, double lam1, double v2, doub
 //Ф-ия эксцесса
 double excesMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
-    double mathExp1 = mathexp(-1, 1, v1, u1, lam1);
-    double mathExp2 = mathexp(-1, 1, v2, u2, lam2);
+    double mathExp1 = mathexp(v1, u1, lam1, 1);
+    double mathExp2 = mathexp(v2, u2, lam2, 1);
     double dispersion1 = dispersion(v1, lam1);
     double dispersion2 = dispersion(v2, lam2);
     double dispersionMixx = dispersionMix(p, v1, u1, lam1, v2, u2, lam2);
@@ -82,9 +82,8 @@ void testMix() {
     assert(fabs(densityMix(0, 0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.275668) < 0.001);
     assert(fabs(mathexpMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.075588 < 0.001));
     assert(fabs(dispersionMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 1) < 0.001);
-    // не вышло посчитать коэфф ассиметрии и соответственно эксцесс тоже
-    //std::cout << asymmetry(0.5, 1, 2) << std::endl;
-    //std::cout << asymmetryMix(0.5, 0.5, 1, 2, 0.5, 1, 2) << std::endl;
+    assert(fabs(asymmetryMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.014282) < 0.001);
+    assert(fabs(excesMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - (-1)) < 0.001);
 
 
     std::cout << "All tests done" << std::endl;
