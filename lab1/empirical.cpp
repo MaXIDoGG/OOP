@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <cassert>
 using namespace std;
 
 // Эмпирическое распределение
@@ -78,14 +79,14 @@ double excess(const vector<double>& sample) {
 }
 
 // Моделирование выборки
-vector<double> random_sample_simulation() {
+vector<double> random_sample_simulation(int n) {
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> dis(0, 1);
 
     // Создание выборки
     vector<double> sample;
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < n; ++i) {
         sample.push_back(dis(gen));
     }
     return sample;
@@ -102,4 +103,3 @@ double random_var_simulation(const vector<double>& sample) {
     double x = min_x + (max_x - min_x) * dis(gen);
     return x;
 }
-
