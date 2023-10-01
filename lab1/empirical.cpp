@@ -4,30 +4,35 @@
 #include <algorithm>
 #include <random>
 #include <cassert>
+#include <fstream>
 using namespace std;
 
-// Эмпирическое распределение
+// Эмпирическая плотность
 double empirical_density(double x, const vector<double>& sample) {
     int n = sample.size();
-    int k = int(ceil((1 + 3.222*log(n)))); // формула Стерджесса
-    double min_x = *min_element(sample.begin(), sample.end());
-    double max_x = *max_element(sample.begin(), sample.end());
+    int k = static_cast<int>(std::ceil(1 + 3.222 * std::log(n))); // Формула Стерджесса
+    double min_x = *std::min_element(sample.begin(), sample.end());
+    double max_x = *std::max_element(sample.begin(), sample.end());
     double range = max_x - min_x;
     double h = range / k;
     vector<int> counts(k, 0);
+
     for (double xi : sample) {
         if (xi >= min_x && xi <= max_x) {
-            int group = (xi - min_x) / h;
+            int group = static_cast<int>((xi - min_x) / h);
             counts[group]++;
         }
     }
+
     int count = 0;
     for (int i = 0; i < k; i++) {
         if (min_x + (i + 1) * h <= x) {
             count += counts[i];
         }
     }
-    return static_cast<double>(count) / n;
+
+    double density = static_cast<double>(count) / (n * h);
+    return density;
 }
 
 
@@ -102,4 +107,35 @@ double random_var_simulation(const vector<double>& sample) {
     double max_x = *max_element(sample.begin(), sample.end());
     double x = min_x + (max_x - min_x) * dis(gen);
     return x;
+}
+
+// Эмпирическая плотность с выборкой из файла
+double empirical_density_file(const string& filename, double x) {
+    ifstream inputFile(filename);
+    if (!inputFile) {
+        cerr << "The file could not be opened." << endl;
+        return 1;
+    }
+
+    vector<double> sample;
+    double number;
+    while (inputFile >> number) {
+        sample.push_back(number);
+    }
+    inputFile.close();
+    double density = empirical_density(x, sample);
+    return density;
+}
+
+
+int empirical_test() {
+    vector<double> sample = {1.123, 1.123, 2.345, 2.345, 3.1, 5.1, 7.8, 9.9, 1.2};
+    assert(fabs(empirical_density(5, sample) - 0.683605) < 0.01);
+    assert(fabs(math_expectation(sample) - 3.78178) < 0.01);
+    assert(fabs(dispersion(sample) - 8.96819) < 0.01);
+    assert(fabs(asymmetry(sample) - 0.972817) < 0.01);
+    assert(fabs(excess(sample) - (-0.488406)) < 0.01);
+
+    cout << "All tests are completed";
+    return 0;
 }
