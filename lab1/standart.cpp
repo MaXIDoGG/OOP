@@ -46,31 +46,30 @@ double Xgenerate(double v) {
 }
 
 //Вспомогательная ф-ия для мат ожидания
-double helpforinteg(double x, double v, double u, double lam) {
+double helpforinteg(double x, double v, double u, double lam, int m) {
     double result = 0;
     if (lam != 0) result = (densityM((x - u) / lam, v) / lam);
     else result = densityM(x, v);
-    return (result * x);
+    return (result * pow(x, m));
 }
 
 //Мат. ожидание
-double mathexp(double a, double b, double v, double u, double lam) {
+double mathexp(double v, double u, double lam, int m) {
     int i;
     double result, h = 0.1, n = 0;
-    n = (b - a) / h;
-    result = h * (helpforinteg(a, v, u, lam) + helpforinteg(b, v, u, lam)) / 6.0;
+    n = 2 / h;
+    result = h * (helpforinteg(-1, v, u, lam, n) + helpforinteg(1, v, u, lam, m)) / 6.0;
     for(i = 1; i <= n; i++)
-	    result = result + 4.0 / 6.0 * h * helpforinteg(a + h * (i - 0.5), v, u, lam);
+	    result = result + 4.0 / 6.0 * h * helpforinteg(-1 + h * (i - 0.5), v, u, lam, m);
     for(i = 1; i <= n-1; i++)
-	    result = result + 2.0 / 6.0 * h * helpforinteg(a + h * i, v, u, lam);
+	    result = result + 2.0 / 6.0 * h * helpforinteg(-1 + h * i, v, u, lam, m);
     return result;
 }
 
 //Коэф. асимметрии
 double asymmetry(double v, double u, double lam) {
-    double a = -1 - mathexp(-1, 1, v, u, lam);
-    double b = 1 - mathexp(-1, 1, v, u, lam);
-    double result = mathexp(a, b, v, u, lam);
+    double result = 0;
+    result = mathexp(v, u, lam, 3) - 3 * mathexp(v, u, lam, 2) * mathexp(v, u, lam, 1) + 2 * pow(mathexp(v, u, lam, 1), 3);
     result /= pow(dispersion(v, lam), 3 / 2);
     return result;
 }

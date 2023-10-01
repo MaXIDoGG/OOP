@@ -10,5 +10,5 @@ double Xgenerate(double v);
 double dispersion(double v, double lam);
 double densityM(double x, double v);
 double density(double x, double v, double u, double lam);
-double mathexp(double a, double b, double v, double u, double lam);
+double mathexp(double v, double u, double lam, int n);
 double asymmetry(double v, double u, double lam);
