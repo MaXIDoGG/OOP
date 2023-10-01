@@ -10,9 +10,9 @@ using namespace std;
 // Эмпирическая плотность
 double empirical_density(double x, const vector<double>& sample) {
     int n = sample.size();
-    int k = static_cast<int>(std::ceil(1 + 3.222 * std::log(n))); // Формула Стерджесса
-    double min_x = *std::min_element(sample.begin(), sample.end());
-    double max_x = *std::max_element(sample.begin(), sample.end());
+    int k = static_cast<int>(ceil(1 + 3.222 * log(n))); // Формула Стерджесса
+    double min_x = *min_element(sample.begin(), sample.end());
+    double max_x = *max_element(sample.begin(), sample.end());
     double range = max_x - min_x;
     double h = range / k;
     vector<int> counts(k, 0);
