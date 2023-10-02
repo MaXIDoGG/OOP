@@ -10,7 +10,7 @@ using namespace std;
 // Эмпирическая плотность
 double empirical_density(double x, const vector<double>& sample) {
     int n = sample.size();
-    int k = static_cast<int>(ceil(1 + 3.222 * log(n))); // Формула Стерджесса
+    int k = static_cast<int>(ceil(1 + 3.222 * log(n)));
     double min_x = *min_element(sample.begin(), sample.end());
     double max_x = *max_element(sample.begin(), sample.end());
     double range = max_x - min_x;
@@ -89,7 +89,6 @@ vector<double> random_sample_simulation(int n) {
     mt19937 gen(rd());
     uniform_real_distribution<double> dis(0, 1);
 
-    // Создание выборки
     vector<double> sample;
     for (int i = 0; i < n; ++i) {
         sample.push_back(dis(gen));
@@ -131,13 +130,18 @@ double empirical_density_file(const string& filename, double x) {
 int empirical_test() {
     cout << "Тестирование эмпирического распределения\n";
     vector<double> sample = {1.123, 1.123, 2.345, 2.345, 3.1, 5.1, 7.8, 9.9, 1.2};
-    assert(fabs(empirical_density(5, sample) - 0.683605) < 0.01);
-    assert(fabs(math_expectation(sample) - 3.78178) < 0.01);
-    assert(fabs(dispersion(sample) - 8.96819) < 0.01);
-    assert(fabs(asymmetry(sample) - 0.972817) < 0.01);
-    assert(fabs(excess(sample) - (-0.488406)) < 0.01);
+    double d = empirical_density(5, sample);
+    double m = math_expectation(sample);
+    double dis = dispersion(sample);
+    double y1 = asymmetry(sample);
+    double y2 = excess(sample);
+    assert(fabs(d - 0.683605) < 0.01);
+    assert(fabs(m - 3.78178) < 0.01);
+    assert(fabs(dis - 8.96819) < 0.01);
+    assert(fabs(y1 - 0.972817) < 0.01);
+    assert(fabs(y2 - (-0.488406)) < 0.01);
 
-
+    cout << "f(x) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << y2 << "\nY1 = " << y1 << "\n";
     cout << "All tests are completed";
     return 0;
 }
