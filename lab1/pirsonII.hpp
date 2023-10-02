@@ -10,7 +10,7 @@ using namespace std;
 double excess(double v);
 double Rgenerate();
 double Xgenerate(double v);
-double dispersion(double v, double lam);
+double dispersion(double v, double lam, double u);
 double densityM(double x, double v);
 double density(double x, double v, double u, double lam);
 double mathexp(double v, double u, double lam, int n);

@@ -26,8 +26,8 @@ double dispersionMix(double p, double v1, double u1, double lam1, double v2, dou
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
     double mathExp2 = mathexp(v2, u2, lam2, 1);
-    double dispersion1 = dispersion(v1, lam1);
-    double dispersion2 = dispersion(v2, lam2);
+    double dispersion1 = dispersion(v1, lam1, u1);
+    double dispersion2 = dispersion(v2, lam2, u2);
     double result = (1 - p) * (pow(mathExp1, 2) + dispersion1) + p * (pow(mathExp2, 2) + dispersion2) - pow(mathExpMix, 2); 
     return result;
 }
@@ -37,8 +37,8 @@ double asymmetryMix(double p, double v1, double u1, double lam1, double v2, doub
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
     double mathExp2 = mathexp(v2, u2, lam2, 1);
-    double dispersion1 = dispersion(v1, lam1);
-    double dispersion2 = dispersion(v2, lam2);
+    double dispersion1 = dispersion(v1, lam1, u1);
+    double dispersion2 = dispersion(v2, lam2, u2);
     double dispersionMixx = dispersionMix(p, v1, u1, lam1, v2, u2, lam2);
     double assymetry1 = asymmetry(v1, u1, lam1);
     double assymetry2 = asymmetry(v2, u2, lam2);
@@ -54,8 +54,8 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
     double mathExp2 = mathexp(v2, u2, lam2, 1);
-    double dispersion1 = dispersion(v1, lam1);
-    double dispersion2 = dispersion(v2, lam2);
+    double dispersion1 = dispersion(v1, lam1, u1);
+    double dispersion2 = dispersion(v2, lam2, u2);
     double dispersionMixx = dispersionMix(p, v1, u1, lam1, v2, u2, lam2);
     double assymetry1 = asymmetry(v1, u1, lam1);
     double assymetry2 = asymmetry(v2, u2, lam2);

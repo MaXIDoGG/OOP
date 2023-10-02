@@ -13,16 +13,16 @@ double densityM(double x, double v) {
 //Ф-ия плотности f(x, v)
 double density(double x, double v, double u, double lam) {
     double result = 0;
-    if (lam != 1 && u != 0) result = (densityM((x - u) / lam, v) / lam);
+    if ((lam != 1 && lam > 0) && u != 0 ) result = (densityM((x - u) / lam, v) / lam);
     else result = densityM(x, v);
     return result;
 }
 
 //Ф-ия Дисперсии
-double dispersion(double v, double lam) {
+double dispersion(double v, double lam, double u) {
     double result = 0;
     result = (1 / (2 * v + 3));
-    if (lam != 0) result *= lam * lam;
+    if (lam != 1 || u != 0) result *= lam * lam;
     return result;
 }
 
@@ -63,7 +63,7 @@ double mathexp(double v, double u, double lam, int m) {
 	    result = result + 4.0 / 6.0 * h * helpforinteg(-1 + h * (i - 0.5), v, u, lam, m);
     for(i = 1; i <= n-1; i++)
 	    result = result + 2.0 / 6.0 * h * helpforinteg(-1 + h * i, v, u, lam, m);
-    if(u != 0 && lam != 1) result *= u;
+    if(u != 0 || lam != 1) result *= u;
     return result;
 }
 
@@ -71,41 +71,43 @@ double mathexp(double v, double u, double lam, int m) {
 double asymmetry(double v, double u, double lam) {
     double result = 0;
     result = mathexp(v, u, lam, 3) - 3 * mathexp(v, u, lam, 2) * mathexp(v, u, lam, 1) + 2 * pow(mathexp(v, u, lam, 1), 3);
-    result /= pow(dispersion(v, lam), 3 / 2);
+    result /= pow(dispersion(v, lam, u), 3 / 2);
     return result;
 }
 
 void testStandart() {
     double x = 0, u = 0, lam = 1;
     cout << "Тестирование стандартного распределения с параметрами x = 0, u = 0, lambda = 1\n";
-    double d = density(x, 0, u, lam), m = mathexp(0, u, lam, 1), dis = dispersion(0, lam), exc = excess(0), a = asymmetry(0, u, lam);
+    double d = density(x, 0, u, lam), m = mathexp(0, u, lam, 1), dis = dispersion(0, lam, u), exc = excess(0);
+    float a = asymmetry(0, u, lam);
     assert(fabs(d - 0.5) < 0.01);
-    assert(fabs(m - 0.5) < 0.01);
-    assert(fabs(dis - 0.5) < 0.01);
-    assert(fabs(exc - 0.5) < 0.01);
-    assert(fabs(a - 0.5) < 0.01);
+    assert(fabs(m - 0.0166667) < 0.01);
+    assert(fabs(dis - 0.333333) < 0.01);
+    assert(fabs(exc - (-1.2)) < 0.01);
+    assert(fabs(a - 2.77778e-05) < 0.01);
     cout << "v = 0, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
-    d = density(x, 6, u, lam), m = mathexp(6, u, lam, 1), dis = dispersion(6, lam), exc = excess(6), a = asymmetry(6, u, lam);
+    d = density(x, 6, u, lam), m = mathexp(6, u, lam, 1), dis = dispersion(6, lam, u), exc = excess(6), a = asymmetry(6, u, lam);
     assert(fabs(d - 1.466) < 0.01);
-    assert(fabs(m - 0.5) < 0.01);
-    assert(fabs(dis - 0.5) < 0.01);
-    assert(fabs(exc - 0.5) < 0.01);
-    assert(fabs(a - 0.5) < 0.01);
+    assert(fabs(m - (-1.623e-17)) < 0.01);
+    assert(fabs(dis - 0.0666) < 0.01);
+    assert(fabs(exc - (-0.3529)) < 0.01);
+    assert(fabs(a - 5.803e-17) < 0.01);
     cout << "v = 6, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
     cout << "Тестирование сдвиг-масштабного распределения с параметрами x = 0, u - произольное, lambda = 2\n";
-    u = 3; d = density(x, 1, u, lam), m = mathexp(1, u, lam, 1), dispersion(1, lam), exc = excess(1), a = asymmetry(1, u, lam);
-    assert(fabs(d - 1.466) < 0.01);
-    assert(fabs(m - 0.5) < 0.01);
-    assert(fabs(dis - 0.5) < 0.01);
-    assert(fabs(exc - 0.5) < 0.01);
-    assert(fabs(a - 0.5) < 0.01);
+    u = 3, lam = 2;
+    d = density(x, 1, u, lam), m = mathexp(1, u, lam, 1), dis = dispersion(1, lam, u), exc = excess(1), a = asymmetry(1, u, lam);
+    assert(fabs(d - (-0.46875)) < 0.01);
+    assert(fabs(m - 1.0125) < 0.01);
+    assert(fabs(dis - 0.8) < 0.1);
+    assert(fabs(exc - (-0.85714)) < 0.01);
+    assert(fabs(a - 7.28478) < 0.01);
     cout << "v = 1, u = 3, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
-    u = 3; d = density(x, 6, u, lam), m = mathexp(6, u, lam, 1), dispersion(6, lam), exc = excess(6), a = asymmetry(6, u, lam);
-    assert(fabs(d - 1.466) < 0.01);
-    assert(fabs(m - 0.5) < 0.01);
-    assert(fabs(dis - 0.5) < 0.01);
-    assert(fabs(exc - 0.5) < 0.01);
-    assert(fabs(a - 0.5) < 0.01);
-    cout << "v = 6, u = 3, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
-    cout << "All tests are completed";
+    d = density(x, 4, u, lam), m = mathexp(4, u, lam, 1), dis = dispersion(4, lam, u), exc = excess(4), a = asymmetry(4, u, lam);
+    assert(fabs(d - 1.50204) < 0.01);
+    assert(fabs(m - (-29.6457)) < 0.01);
+    assert(fabs(dis - 0.363636) < 0.01);
+    assert(fabs(exc - (-0.461538)) < 0.01);
+    assert(fabs(a - (-136544.32)) < 0.01); 
+    cout << "v = 4, u = 3, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
+    cout << "All tests are completed\n";
 }

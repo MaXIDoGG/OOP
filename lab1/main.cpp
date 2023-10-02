@@ -18,9 +18,9 @@ int main() {
             cin >> u;
             cout << "Введите параметр масштаба lambda: ";
             cin >> lam;
-            cout << "Функция плотности = " << density(x, u, v, lam) << "\n";
-            cout << "Функция плотности при x=0 = " << density(0, u, v, lam) << "\n";
-            cout << "Дисперсия = " << dispersion(v, lam) << "\n";
+            cout << "Функция плотности = " << density(x, v, u, lam) << "\n";
+            cout << "Функция плотности при x=0 = " << density(0, v, u, lam) << "\n";
+            cout << "Дисперсия = " << dispersion(v, lam, u) << "\n";
             cout << "Эксцесс = " << excess(v) << "\n";
             cout << "Математическое ожидание = " << mathexp(v, u, lam, 1) << "\n";
             cout << "Асимметрия = " << asymmetry(v, u, lam) << "\n";

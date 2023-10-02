@@ -135,6 +135,6 @@ int empirical_test() {
     assert(fabs(asymmetry(sample) - 0.972817) < 0.01);
     assert(fabs(EmpExcess(sample) - (-0.488406)) < 0.01);
 
-    cout << "All tests are completed";
+    cout << "All tests are completed\n";
     return 0;
 }
