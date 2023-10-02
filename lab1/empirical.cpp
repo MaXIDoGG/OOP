@@ -71,7 +71,7 @@ double asymmetry(const vector<double>& sample) {
 }
 
 // Коэффициент эксцесса
-double excess(const vector<double>& sample) {
+double EmpExcess(const vector<double>& sample) {
     int n = int(sample.size());
     double M = math_expectation(sample);
     double D = dispersion(sample);
