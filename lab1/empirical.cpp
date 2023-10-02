@@ -7,7 +7,7 @@
 #include <fstream>
 using namespace std;
 
-// ù¨Ø®‡®Á•·™†Ô Ø´Æ‚≠Æ·‚Ï
+// –≠–º–ø–∏—Ä–∏—á–µ—Å–∫–∞—è –ø–ª–æ—Ç–Ω–æ—Å—Ç—å
 double empirical_density(double x, const vector<double>& sample) {
     int n = sample.size();
     int k = static_cast<int>(ceil(1 + 3.222 * log(n)));
@@ -36,7 +36,7 @@ double empirical_density(double x, const vector<double>& sample) {
 }
 
 
-// å†‚. Æ¶®§†≠®•
+// –ú–∞—Ç. –æ–∂–∏–¥–∞–Ω–∏–µ
 double math_expectation(const vector<double>& sample) {
     int n = int(sample.size());
     double sum = 0;
@@ -46,7 +46,7 @@ double math_expectation(const vector<double>& sample) {
     return sum/n;
 }
 
-// Ñ®·Ø•‡·®Ô
+// –î–∏—Å–ø–µ—Ä—Å–∏—è
 double dispersion(const vector<double>& sample) {
     int n = int(sample.size());
     double M = math_expectation(sample);
@@ -57,7 +57,7 @@ double dispersion(const vector<double>& sample) {
     return sum/n;
 }
 
-// äÆÌ‰‰®Ê®•≠‚ †·®¨¨•‚‡®®
+// –ö–æ—ç—Ñ—Ñ–∏—Ü–∏–µ–Ω—Ç –∞—Å–∏–º–º–µ—Ç—Ä–∏–∏
 double asymmetry(const vector<double>& sample) {
     int n = int(sample.size());
     double M = math_expectation(sample);
@@ -70,7 +70,7 @@ double asymmetry(const vector<double>& sample) {
     return sum;
 }
 
-// äÆÌ‰‰®Ê®•≠‚ Ì™·Ê•··†
+// –ö–æ—ç—Ñ—Ñ–∏—Ü–∏–µ–Ω—Ç —ç–∫—Å—Ü–µ—Å—Å–∞
 double excess(const vector<double>& sample) {
     int n = int(sample.size());
     double M = math_expectation(sample);
@@ -83,7 +83,7 @@ double excess(const vector<double>& sample) {
     return sum;
 }
 
-// åÆ§•´®‡Æ¢†≠®• ¢Î°Æ‡™®
+// –ú–æ–¥–µ–ª–∏—Ä–æ–≤–∞–Ω–∏–µ –≤—ã–±–æ—Ä–∫–∏
 vector<double> random_sample_simulation(int n) {
     random_device rd;
     mt19937 gen(rd());
@@ -96,7 +96,7 @@ vector<double> random_sample_simulation(int n) {
     return sample;
 }
 
-// åÆ§•´®‡Æ¢†≠®• ·´„Á†©≠Æ© ¢•´®Á®≠Î
+// –ú–æ–¥–µ–ª–∏—Ä–æ–≤–∞–Ω–∏–µ —Å–ª—É—á–∞–π–Ω–æ–π –≤–µ–ª–∏—á–∏–Ω—ã
 double random_var_simulation(const vector<double>& sample) {
     random_device rd;
     mt19937 gen(rd());
@@ -108,7 +108,7 @@ double random_var_simulation(const vector<double>& sample) {
     return x;
 }
 
-// ù¨Ø®‡®Á•·™†Ô Ø´Æ‚≠Æ·‚Ï · ¢Î°Æ‡™Æ© ®ß ‰†©´†
+// –≠–º–ø–∏—Ä–∏—á–µ—Å–∫–∞—è –ø–ª–æ—Ç–Ω–æ—Å—Ç—å —Å –≤—ã–±–æ—Ä–∫–æ–π –∏–∑ —Ñ–∞–π–ª–∞
 double empirical_density_file(const string& filename, double x) {
     ifstream inputFile(filename);
     if (!inputFile) {
@@ -128,7 +128,7 @@ double empirical_density_file(const string& filename, double x) {
 
 
 int empirical_test() {
-    cout << "í•·‚®‡Æ¢†≠®• Ì¨Ø®‡®Á•·™Æ£Æ ‡†·Ø‡•§•´•≠®Ô\n";
+    cout << "–¢–µ—Å—Ç–∏—Ä–æ–≤–∞–Ω–∏–µ —ç–º–ø–∏—Ä–∏—á–µ—Å–∫–æ–≥–æ —Ä–∞—Å–ø—Ä–µ–¥–µ–ª–µ–Ω–∏—è\n";
     vector<double> sample = {1.123, 1.123, 2.345, 2.345, 3.1, 5.1, 7.8, 9.9, 1.2};
     double d = empirical_density(5, sample);
     double m = math_expectation(sample);

@@ -1,11 +1,11 @@
 #include "pirsonII.hpp"
 #include <cassert>
 
-//v ïàðàìåòð ôîðìû îí æå íþ
-//u ïàðàìåòð ñäâèãà îí æå ìþ
-//lam ïàðàìåòð ìàñøòàáà îí æå ëÿìáäà
+//v Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€ Ñ„Ð¾Ñ€Ð¼Ñ‹ Ð¾Ð½ Ð¶Ðµ Ð½ÑŽ
+//u Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€ ÑÐ´Ð²Ð¸Ð³Ð° Ð¾Ð½ Ð¶Ðµ Ð¼ÑŽ
+//lam Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€ Ð¼Ð°ÑÑˆÑ‚Ð°Ð±Ð° Ð¾Ð½ Ð¶Ðµ Ð»ÑÐ¼Ð±Ð´Ð°
 
-//Ô-èÿ ïëîòíîñòè 
+//Ð¤-Ð¸Ñ Ð¿Ð»Ð¾Ñ‚Ð½Ð¾ÑÑ‚Ð¸
 double densityMix(double x, double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double density1 = density(x, v1, u1, lam1);
     double density2 = density(x, v2, u2, lam2);
@@ -13,7 +13,7 @@ double densityMix(double x, double p, double v1, double u1, double lam1, double 
     return result;
 }
 
-//Ô-èÿ ìàò. îæèäàíèÿ
+//Ð¤-Ð¸Ñ Ð¼Ð°Ñ‚. Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ñ
 double mathexpMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExp1 = mathexp(v1, u1, lam1, 1);
     double mathExp2 = mathexp(v2, u2, lam2, 1);
@@ -21,18 +21,18 @@ double mathexpMix(double p, double v1, double u1, double lam1, double v2, double
     return result;
 }
 
-//Ô-èÿ Äèñïåðñèè
+//Ð¤-Ð¸Ñ Ð”Ð¸ÑÐ¿ÐµÑ€ÑÐ¸Ð¸
 double dispersionMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
     double mathExp2 = mathexp(v2, u2, lam2, 1);
     double dispersion1 = dispersion(v1, lam1);
     double dispersion2 = dispersion(v2, lam2);
-    double result = (1 - p) * (pow(mathExp1, 2) + dispersion1) + p * (pow(mathExp2, 2) + dispersion2) - pow(mathExpMix, 2); 
+    double result = (1 - p) * (pow(mathExp1, 2) + dispersion1) + p * (pow(mathExp2, 2) + dispersion2) - pow(mathExpMix, 2);
     return result;
 }
 
-//Êîýô. àñèììåòðèè
+//ÐšÐ¾ÑÑ„. Ð°ÑÐ¸Ð¼Ð¼ÐµÑ‚Ñ€Ð¸Ð¸
 double asymmetryMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
@@ -43,13 +43,13 @@ double asymmetryMix(double p, double v1, double u1, double lam1, double v2, doub
     double assymetry1 = asymmetry(v1, u1, lam1);
     double assymetry2 = asymmetry(v2, u2, lam2);
     double result = 1 / pow(dispersionMixx, 3 / 2) * (
-        (1 - p) * (pow(mathExp1 - mathExpMix, 3) + 3 * (mathExp1 - mathExpMix) * dispersion1 + pow(dispersion1, 3/2)*assymetry1) + 
+        (1 - p) * (pow(mathExp1 - mathExpMix, 3) + 3 * (mathExp1 - mathExpMix) * dispersion1 + pow(dispersion1, 3/2)*assymetry1) +
         p * (pow(mathExp2 - mathExpMix, 3) + 3 * (mathExp2 - mathExpMix) * dispersion2 + pow(dispersion2, 3 / 2) * assymetry2)
         );
     return result;
 }
 
-//Ô-èÿ ýêñöåññà
+//Ð¤-Ð¸Ñ ÑÐºÑÑ†ÐµÑÑÐ°
 double excesMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
@@ -62,15 +62,15 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
     double exces1 = exces(v1);
     double exces2 = exces(v2);
     double result = 1 / pow(dispersionMixx, 2) * (
-        (1 - p) * (pow(mathExp1 - mathExpMix, 4) + 6 * pow(mathExp1 - mathExpMix, 2) * dispersion1 + 4 * (mathExp1 - mathExpMix) * 
-            pow(dispersion1, 3 / 2) * assymetry1 + pow(dispersion1, 2) * (exces1 + 3)) + 
+        (1 - p) * (pow(mathExp1 - mathExpMix, 4) + 6 * pow(mathExp1 - mathExpMix, 2) * dispersion1 + 4 * (mathExp1 - mathExpMix) *
+            pow(dispersion1, 3 / 2) * assymetry1 + pow(dispersion1, 2) * (exces1 + 3)) +
         p * (pow(mathExp2 - mathExpMix, 4) + 6 * pow(mathExp2 - mathExpMix, 2) * dispersion2 + 4 * (mathExp2 - mathExpMix) *
             pow(dispersion2, 3 / 2) * assymetry2 + pow(dispersion2, 2) * (exces2 + 3))
         ) - 3;
     return result;
 }
 
-//Ìîäåëèðîâàíèå ñëó÷àéíîé âåëè÷èíû
+//ÐœÐ¾Ð´ÐµÐ»Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ð¾Ð¹ Ð²ÐµÐ»Ð¸Ñ‡Ð¸Ð½Ñ‹
 double generateMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double r = Rgenerate();
     if (r > p) return Xgenerate(v1);
