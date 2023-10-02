@@ -59,8 +59,8 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
     double dispersionMixx = dispersionMix(p, v1, u1, lam1, v2, u2, lam2);
     double assymetry1 = asymmetry(v1, u1, lam1);
     double assymetry2 = asymmetry(v2, u2, lam2);
-    double exces1 = exces(v1);
-    double exces2 = exces(v2);
+    double exces1 = excess(v1);
+    double exces2 = excess(v2);
     double result = 1 / pow(dispersionMixx, 2) * (
         (1 - p) * (pow(mathExp1 - mathExpMix, 4) + 6 * pow(mathExp1 - mathExpMix, 2) * dispersion1 + 4 * (mathExp1 - mathExpMix) * 
             pow(dispersion1, 3 / 2) * assymetry1 + pow(dispersion1, 2) * (exces1 + 3)) + 

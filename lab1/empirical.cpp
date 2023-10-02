@@ -1,0 +1,140 @@
+#include "empirical.h"
+#include <math.h>
+#include <vector>
+#include <algorithm>
+#include <random>
+#include <cassert>
+#include <fstream>
+using namespace std;
+
+// Эмпирическая плотность
+double empirical_density(double x, const vector<double>& sample) {
+    int n = sample.size();
+    int k = static_cast<int>(ceil(1 + 3.222 * log(n)));
+    double min_x = *min_element(sample.begin(), sample.end());
+    double max_x = *max_element(sample.begin(), sample.end());
+    double range = max_x - min_x;
+    double h = range / k;
+    vector<int> counts(k, 0);
+
+    for (double xi : sample) {
+        if (xi >= min_x && xi <= max_x) {
+            int group = static_cast<int>((xi - min_x) / h);
+            counts[group]++;
+        }
+    }
+
+    int count = 0;
+    for (int i = 0; i < k; i++) {
+        if (min_x + (i + 1) * h <= x) {
+            count += counts[i];
+        }
+    }
+
+    double density = static_cast<double>(count) / (n * h);
+    return density;
+}
+
+
+// Мат. ожидание
+double math_expectation(const vector<double>& sample) {
+    int n = int(sample.size());
+    double sum = 0;
+    for (int i=0; i < n; i++) {
+        sum += sample[i];
+    }
+    return sum/n;
+}
+
+// Дисперсия
+double dispersion(const vector<double>& sample) {
+    int n = int(sample.size());
+    double M = math_expectation(sample);
+    double sum = 0;
+    for (int i=0; i < n; i++) {
+        sum += pow((sample[i] - M), 2);
+    }
+    return sum/n;
+}
+
+// Коэффициент асимметрии
+double asymmetry(const vector<double>& sample) {
+    int n = int(sample.size());
+    double M = math_expectation(sample);
+    double D = dispersion(sample);
+    double sum = 0;
+    for (int i=0; i < n; i++) {
+        sum += pow((sample[i] - M), 3);
+    }
+    sum = sum/(n * pow(D, 1.5));
+    return sum;
+}
+
+// Коэффициент эксцесса
+double EmpExcess(const vector<double>& sample) {
+    int n = int(sample.size());
+    double M = math_expectation(sample);
+    double D = dispersion(sample);
+    double sum = 0;
+    for (int i=0; i < n; i++) {
+        sum += pow((sample[i] - M), 4);
+    }
+    sum = (sum/(n * pow(D, 2 ))) - 3;
+    return sum;
+}
+
+// Моделирование выборки
+vector<double> random_sample_simulation(int n) {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<double> dis(0, 1);
+
+    vector<double> sample;
+    for (int i = 0; i < n; ++i) {
+        sample.push_back(dis(gen));
+    }
+    return sample;
+}
+
+// Моделирование случайной величины
+double random_var_simulation(const vector<double>& sample) {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<double> dis(0, 1);
+
+    double min_x = *min_element(sample.begin(), sample.end());
+    double max_x = *max_element(sample.begin(), sample.end());
+    double x = min_x + (max_x - min_x) * dis(gen);
+    return x;
+}
+
+// Эмпирическая плотность с выборкой из файла
+double empirical_density_file(const string& filename, double x) {
+    ifstream inputFile(filename);
+    if (!inputFile) {
+        cerr << "The file could not be opened." << endl;
+        return 1;
+    }
+
+    vector<double> sample;
+    double number;
+    while (inputFile >> number) {
+        sample.push_back(number);
+    }
+    inputFile.close();
+    double density = empirical_density(x, sample);
+    return density;
+}
+
+
+int empirical_test() {
+    vector<double> sample = {1.123, 1.123, 2.345, 2.345, 3.1, 5.1, 7.8, 9.9, 1.2};
+    assert(fabs(empirical_density(5, sample) - 0.683605) < 0.01);
+    assert(fabs(math_expectation(sample) - 3.78178) < 0.01);
+    assert(fabs(dispersion(sample) - 8.96819) < 0.01);
+    assert(fabs(asymmetry(sample) - 0.972817) < 0.01);
+    assert(fabs(EmpExcess(sample) - (-0.488406)) < 0.01);
+
+    cout << "All tests are completed";
+    return 0;
+}

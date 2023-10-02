@@ -1,6 +1,6 @@
 #include "pirsonII.hpp"
 #include "mix.hpp"
-#include "empirical.hpp"
+#include "empirical.h"
 
 int main() {
     int i = 0, j = 0;
@@ -21,7 +21,7 @@ int main() {
             cout << "Функция плотности = " << density(x, u, v, lam) << "\n";
             cout << "Функция плотности при x=0 = " << density(0, u, v, lam) << "\n";
             cout << "Дисперсия = " << dispersion(v, lam) << "\n";
-            cout << "Эксцесс = " << exces(v) << "\n";
+            cout << "Эксцесс = " << excess(v) << "\n";
             cout << "Математическое ожидание = " << mathexp(v, u, lam, 1) << "\n";
             cout << "Асимметрия = " << asymmetry(v, u, lam) << "\n";
             break;
@@ -52,7 +52,9 @@ int main() {
             cout << "Введите параметр сдвига v: ";
             break;
         case 4:
-            
+            testStandart();
+            testMix();
+            empirical_test();
             break;
         default:
             break;
