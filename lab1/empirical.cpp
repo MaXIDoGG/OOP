@@ -7,10 +7,10 @@
 #include <fstream>
 using namespace std;
 
-// –≠–º–ø–∏—Ä–∏—á–µ—Å–∫–∞—è –ø–ª–æ—Ç–Ω–æ—Å—Ç—å
+// ù¨Ø®‡®Á•·™†Ô Ø´Æ‚≠Æ·‚Ï
 double empirical_density(double x, const vector<double>& sample) {
     int n = sample.size();
-    int k = static_cast<int>(ceil(1 + 3.222 * log(n))); // –§–æ—Ä–º—É–ª–∞ –°—Ç–µ—Ä–¥–∂–µ—Å—Å–∞
+    int k = static_cast<int>(ceil(1 + 3.222 * log(n))); // îÆ‡¨„´† ë‚•‡§¶•··†
     double min_x = *min_element(sample.begin(), sample.end());
     double max_x = *max_element(sample.begin(), sample.end());
     double range = max_x - min_x;
@@ -36,7 +36,7 @@ double empirical_density(double x, const vector<double>& sample) {
 }
 
 
-// –ú–∞—Ç. –æ–∂–∏–¥–∞–Ω–∏–µ
+// å†‚. Æ¶®§†≠®•
 double math_expectation(const vector<double>& sample) {
     int n = int(sample.size());
     double sum = 0;
@@ -46,7 +46,7 @@ double math_expectation(const vector<double>& sample) {
     return sum/n;
 }
 
-// –î–∏—Å–ø–µ—Ä—Å–∏—è
+// Ñ®·Ø•‡·®Ô
 double dispersion(const vector<double>& sample) {
     int n = int(sample.size());
     double M = math_expectation(sample);
@@ -57,7 +57,7 @@ double dispersion(const vector<double>& sample) {
     return sum/n;
 }
 
-// –ö–æ—ç—Ñ—Ñ–∏—Ü–∏–µ–Ω—Ç –∞—Å–∏–º–º–µ—Ç—Ä–∏–∏
+// äÆÌ‰‰®Ê®•≠‚ †·®¨¨•‚‡®®
 double asymmetry(const vector<double>& sample) {
     int n = int(sample.size());
     double M = math_expectation(sample);
@@ -70,7 +70,7 @@ double asymmetry(const vector<double>& sample) {
     return sum;
 }
 
-// –ö–æ—ç—Ñ—Ñ–∏—Ü–∏–µ–Ω—Ç —ç–∫—Å—Ü–µ—Å—Å–∞
+// äÆÌ‰‰®Ê®•≠‚ Ì™·Ê•··†
 double excess(const vector<double>& sample) {
     int n = int(sample.size());
     double M = math_expectation(sample);
@@ -83,13 +83,13 @@ double excess(const vector<double>& sample) {
     return sum;
 }
 
-// –ú–æ–¥–µ–ª–∏—Ä–æ–≤–∞–Ω–∏–µ –≤—ã–±–æ—Ä–∫–∏
+// åÆ§•´®‡Æ¢†≠®• ¢Î°Æ‡™®
 vector<double> random_sample_simulation(int n) {
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> dis(0, 1);
 
-    // –°–æ–∑–¥–∞–Ω–∏–µ –≤—ã–±–æ—Ä–∫–∏
+    // ëÆß§†≠®• ¢Î°Æ‡™®
     vector<double> sample;
     for (int i = 0; i < n; ++i) {
         sample.push_back(dis(gen));
@@ -97,7 +97,7 @@ vector<double> random_sample_simulation(int n) {
     return sample;
 }
 
-// –ú–æ–¥–µ–ª–∏—Ä–æ–≤–∞–Ω–∏–µ —Å–ª—É—á–∞–π–Ω–æ–π –≤–µ–ª–∏—á–∏–Ω—ã
+// åÆ§•´®‡Æ¢†≠®• ·´„Á†©≠Æ© ¢•´®Á®≠Î
 double random_var_simulation(const vector<double>& sample) {
     random_device rd;
     mt19937 gen(rd());
@@ -109,7 +109,7 @@ double random_var_simulation(const vector<double>& sample) {
     return x;
 }
 
-// –≠–º–ø–∏—Ä–∏—á–µ—Å–∫–∞—è –ø–ª–æ—Ç–Ω–æ—Å—Ç—å —Å –≤—ã–±–æ—Ä–∫–æ–π –∏–∑ —Ñ–∞–π–ª–∞
+// ù¨Ø®‡®Á•·™†Ô Ø´Æ‚≠Æ·‚Ï · ¢Î°Æ‡™Æ© ®ß ‰†©´†
 double empirical_density_file(const string& filename, double x) {
     ifstream inputFile(filename);
     if (!inputFile) {
@@ -129,12 +129,14 @@ double empirical_density_file(const string& filename, double x) {
 
 
 int empirical_test() {
+    cout << "í•·‚®‡Æ¢†≠®• Ì¨Ø®‡®Á•·™Æ£Æ ‡†·Ø‡•§•´•≠®Ô\n";
     vector<double> sample = {1.123, 1.123, 2.345, 2.345, 3.1, 5.1, 7.8, 9.9, 1.2};
     assert(fabs(empirical_density(5, sample) - 0.683605) < 0.01);
     assert(fabs(math_expectation(sample) - 3.78178) < 0.01);
     assert(fabs(dispersion(sample) - 8.96819) < 0.01);
     assert(fabs(asymmetry(sample) - 0.972817) < 0.01);
     assert(fabs(excess(sample) - (-0.488406)) < 0.01);
+
 
     cout << "All tests are completed";
     return 0;
