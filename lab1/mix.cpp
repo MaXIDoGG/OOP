@@ -1,11 +1,11 @@
 #include "pirsonII.hpp"
-#include <cassert>
+#include "mix.hpp"
 
-//v параметр формы он же ню
-//u параметр сдвига он же мю
-//lam параметр масштаба он же лямбда
+//v пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅ
+//u пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅ
+//lam пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
-//Ф-ия плотности 
+//пїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 double densityMix(double x, double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double density1 = density(x, v1, u1, lam1);
     double density2 = density(x, v2, u2, lam2);
@@ -13,7 +13,7 @@ double densityMix(double x, double p, double v1, double u1, double lam1, double 
     return result;
 }
 
-//Ф-ия мат. ожидания
+//пїЅ-пїЅпїЅ пїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 double mathexpMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExp1 = mathexp(v1, u1, lam1, 1);
     double mathExp2 = mathexp(v2, u2, lam2, 1);
@@ -21,7 +21,7 @@ double mathexpMix(double p, double v1, double u1, double lam1, double v2, double
     return result;
 }
 
-//Ф-ия Дисперсии
+//пїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 double dispersionMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
@@ -32,7 +32,7 @@ double dispersionMix(double p, double v1, double u1, double lam1, double v2, dou
     return result;
 }
 
-//Коэф. асимметрии
+//пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 double asymmetryMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
@@ -49,7 +49,7 @@ double asymmetryMix(double p, double v1, double u1, double lam1, double v2, doub
     return result;
 }
 
-//Ф-ия эксцесса
+//пїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 double excesMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(v1, u1, lam1, 1);
@@ -70,7 +70,7 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
     return result;
 }
 
-//Моделирование случайной величины
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 double generateMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double r = Rgenerate();
     if (r > p) return Xgenerate(v1);
@@ -78,15 +78,24 @@ double generateMix(double p, double v1, double u1, double lam1, double v2, doubl
 }
 
 void testMix() {
-    //x = 0, p = 0.5, u1 = u2 = 1, v1 = v2 = 0.5, lam1 = lam2 = 2
-    assert(fabs(densityMix(0, 0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.275668) < 0.001);
-    assert(fabs(mathexpMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.075588 < 0.001));
-    assert(fabs(dispersionMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 1) < 0.001);
-    assert(fabs(asymmetryMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.014282) < 0.001);
-    assert(fabs(excesMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - (-1)) < 0.001);
+    cout << "x = 0, p = 0.5, v1 = 0.5, u1 = 1, lambda1 = 1, v2 = 0.5, u2 = 1, lambda2 = 2\n";
+    double d = (densityMix(0, 0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.275668);
+    assert(fabs(d < 0.001));
+    cout << "Р¤СѓРЅРєС†РёСЏ РїР»РѕС‚РЅРѕСЃС‚Рё = " << d << "\n";
+    double m = (mathexpMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.075588);
+    assert(fabs(m < 0.001));
+    cout << "РњР°С‚РµРјР°С‚РёС‡РµСЃРєРѕРµ РѕР¶РёРґР°РЅРёРµ = " << m << "\n";
+    double dis = (dispersionMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 1);
+    assert(fabs(dis < 0.001));
+    cout << "Р”РёСЃРїРµСЂСЃРёСЏ = " << dis << "\n";
+    double a = (asymmetryMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.014282);
+    assert(fabs(a < 0.001));
+    cout << "РђСЃРёРјРјРµС‚СЂРёСЏ = " << a << "\n";
+    double e = excesMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - (-1);
+    assert(fabs(e < 0.001));
+    cout << "Р­РєСЃС†РµСЃСЃ = " << e << "\n";
 
-
-    std::cout << "All tests done" << std::endl;
+    cout << "All tests done" << endl;
 }
 
 

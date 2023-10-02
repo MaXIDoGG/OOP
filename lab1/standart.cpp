@@ -73,3 +73,7 @@ double asymmetry(double v, double u, double lam) {
     result /= pow(dispersion(v, lam), 3 / 2);
     return result;
 }
+
+void testStandart() {
+    
+}

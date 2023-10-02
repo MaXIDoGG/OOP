@@ -4,6 +4,8 @@
 #include <math.h>
 #include <time.h>
 
+using namespace std;
+
 double exces(double v);
 double Rgenerate();
 double Xgenerate(double v);
