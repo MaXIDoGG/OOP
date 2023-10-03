@@ -5,7 +5,30 @@
 //u �������� ������ �� �� ��
 //lam �������� �������� �� �� ������
 
-//�-�� ��������� 
+//�-�� ���������
+
+//Генерация выборки для смеси распределений
+vector<double> random_sample_mix(double p, double v1, double v2, int N) {
+    vector<double> sample;
+    for(int i = 0; i < N; i++) {
+        sample.push_back(generateMix(p, v1, v2));
+    }
+    return sample;
+}
+
+//Вывод результата ф-ии плотности для семси распределений в файл
+void  result_to_file_mix(vector<double> sample, double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
+    ofstream out;
+    out.open("txts/Mix.txt");
+    int i = 0;
+    while(sample[i]) {
+        out << densityMix(sample[i], p, v1, u1, lam1, v2, u2, lam2) << endl;
+        i++;
+    }
+    out.close();
+    cout << "Файл подготовлен\n";
+}
+
 double densityMix(double x, double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double density1 = density(x, v1, u1, lam1);
     double density2 = density(x, v2, u2, lam2);
@@ -71,31 +94,30 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
 }
 
 //������������� ��������� ��������
-double generateMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
+double generateMix(double p, double v1, double v2) {
     double r = Rgenerate();
     if (r > p) return Xgenerate(v1);
     else return Xgenerate(v2);
 }
 
 void testMix() {
+    cout << "Тестирование смеси распределений\n";
     cout << "x = 0, p = 0.5, v1 = 0.5, u1 = 1, lambda1 = 1, v2 = 0.5, u2 = 1, lambda2 = 2\n";
     double d = (densityMix(0, 0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.275668);
     assert(fabs(d < 0.001));
-    cout << "Функция плотности = " << d << "\n";
+    cout << "f(x, v) = " << d << "\n";
     double m = (mathexpMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.075588);
     assert(fabs(m < 0.001));
-    cout << "Математическое ожидание = " << m << "\n";
+    cout << "M(X) = " << m << "\n";
     double dis = (dispersionMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 1);
     assert(fabs(dis < 0.001));
-    cout << "Дисперсия = " << dis << "\n";
+    cout << "D(X) = " << dis << "\n";
     double a = (asymmetryMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.014282);
-    assert(fabs(a < 0.001));
-    cout << "Асимметрия = " << a << "\n";
     double e = excesMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - (-1);
     assert(fabs(e < 0.001));
-    cout << "Эксцесс = " << e << "\n";
+    cout << "Y2 = " << e << "\n";
+    assert(fabs(a < 0.001));
+    cout << "Y1 = " << a << "\n";
 
-    cout << "All tests done" << endl;
+    cout << "All tests are complete\n" << endl;
 }
-
-

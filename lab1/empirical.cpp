@@ -1,11 +1,24 @@
-#include "empirical.h"
-#include <math.h>
-#include <vector>
-#include <algorithm>
-#include <random>
-#include <cassert>
-#include <fstream>
+#include "empirical.hpp"
+
 using namespace std;
+
+//ВЫвод результата ф-ии плотности эмпирического распределения в файл
+void result_to_file_empirical(vector<double> sample, int mod) {
+    ofstream out;
+    if(mod == 0)
+        out.open("txts/EmpiricalStd.txt");
+    else if(mod == 1)
+        out.open("txts/EmpiricalULAM.txt");
+    else if(mod == 2)
+        out.open("txts/EmpiricalMIX.txt");
+    int i = 0;
+    while(sample[i]) {
+        out << empirical_density(sample[i], sample) << endl;
+        i++;
+    }
+    out.close();
+    cout << "Файл подготовлен\n";
+}
 
 // Эмпирическая плотность
 double empirical_density(double x, const vector<double>& sample) {
@@ -108,33 +121,21 @@ double random_var_simulation(const vector<double>& sample) {
     return x;
 }
 
-// Эмпирическая плотность с выборкой из файла
-double empirical_density_file(const string& filename, double x) {
-    ifstream inputFile(filename);
-    if (!inputFile) {
-        cerr << "The file could not be opened." << endl;
-        return 1;
-    }
-
-    vector<double> sample;
-    double number;
-    while (inputFile >> number) {
-        sample.push_back(number);
-    }
-    inputFile.close();
-    double density = empirical_density(x, sample);
-    return density;
-}
-
-
 int empirical_test() {
+    cout << "Тестирование эмпирического распределения\n";
     vector<double> sample = {1.123, 1.123, 2.345, 2.345, 3.1, 5.1, 7.8, 9.9, 1.2};
-    assert(fabs(empirical_density(5, sample) - 0.683605) < 0.01);
-    assert(fabs(math_expectation(sample) - 3.78178) < 0.01);
-    assert(fabs(dispersion(sample) - 8.96819) < 0.01);
-    assert(fabs(asymmetry(sample) - 0.972817) < 0.01);
-    assert(fabs(EmpExcess(sample) - (-0.488406)) < 0.01);
+    double d = empirical_density(5, sample);
+    double m = math_expectation(sample);
+    double dis = dispersion(sample);
+    double y1 = asymmetry(sample);
+    double y2 = EmpExcess(sample);
+    assert(fabs(d - 0.683605) < 0.01);
+    assert(fabs(m - 3.78178) < 0.01);
+    assert(fabs(dis - 8.96819) < 0.01);
+    assert(fabs(y1 - 0.972817) < 0.01);
+    assert(fabs(y2 - (-0.488406)) < 0.01);
 
-    cout << "All tests are completed\n";
+    cout << "f(x) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << y2 << "\nY1 = " << y1 << "\n";
+    cout << "All tests are complete\n\n";
     return 0;
 }

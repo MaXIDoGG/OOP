@@ -1,5 +1,31 @@
 #include "pirsonII.hpp"
 
+//Генерация выборки для стандартного распределения
+vector<double> random_sample_standart(int N, double v) {
+    vector<double> sample;
+    for(int i = 0; i < N; i++) {
+        sample.push_back(Xgenerate(v));
+    }
+    return sample;
+}
+
+//Вывод значений ф-ии плотности по выборке в файл
+void result_to_file_standart(vector<double> sample, double v, double u, double lam) {
+    ofstream out;
+    if(u != 0 || lam != 1) {
+        out.open("txts/Standart.txt");
+    } else {
+        out.open("txts/StandartULAM.txt");
+    }
+    int i = 0;
+    while(sample[i]) {
+        out << density(sample[i], v, u, lam) << endl;
+        i++;
+    }
+    out.close();
+    cout << "Файл подготовлен\n";
+}
+
 //Бета-функция по формуле из методички
 double betafunc(double x, double y) {
     return (gamma(x) * gamma(y) / gamma(x + y));
@@ -33,16 +59,21 @@ double excess(double v) {
 
 //реализации случайной величины r, равномерно распределенной на интервале (0, 1)
 double Rgenerate() {
-    double a = 0, b = 1;
-    srand((unsigned)time(0));
-    double r = rand() % (int)pow(10, 4);
-    r = a + (r / pow(10, 4)) * (b - a);
-    return r;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<double> dis(0, 1);
+    return dis(gen);
 }
 
 //Моделирование случайной величины
 double Xgenerate(double v) {
-    return (pow(1 - pow(Rgenerate(), 1 / (v + 0.5)), 0.5) * sin(2 * M_PI * Rgenerate()));
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<double> dis(0, 1);
+    if(dis(gen) >= 0.5)
+        return (pow(1 - pow(Rgenerate(), 1 / (v + 0.5)), 0.5) * sin(2 * M_PI * Rgenerate()));
+    else
+        return (pow(1 - pow(Rgenerate(), 1 / (v + 0.5)), 0.5) * cos(2 * M_PI * Rgenerate()));
 }
 
 //Вспомогательная ф-ия для мат ожидания
@@ -85,14 +116,14 @@ void testStandart() {
     assert(fabs(dis - 0.333333) < 0.01);
     assert(fabs(exc - (-1.2)) < 0.01);
     assert(fabs(a - 2.77778e-05) < 0.01);
-    cout << "v = 0, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
+    cout << "v = 0\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n\n";
     d = density(x, 6, u, lam), m = mathexp(6, u, lam, 1), dis = dispersion(6, lam, u), exc = excess(6), a = asymmetry(6, u, lam);
     assert(fabs(d - 1.466) < 0.01);
     assert(fabs(m - (-1.623e-17)) < 0.01);
     assert(fabs(dis - 0.0666) < 0.01);
     assert(fabs(exc - (-0.3529)) < 0.01);
     assert(fabs(a - 5.803e-17) < 0.01);
-    cout << "v = 6, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
+    cout << "v = 6\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n\n";
     cout << "Тестирование сдвиг-масштабного распределения с параметрами x = 0, u - произольное, lambda = 2\n";
     u = 3, lam = 2;
     d = density(x, 1, u, lam), m = mathexp(1, u, lam, 1), dis = dispersion(1, lam, u), exc = excess(1), a = asymmetry(1, u, lam);
@@ -101,13 +132,13 @@ void testStandart() {
     assert(fabs(dis - 0.8) < 0.1);
     assert(fabs(exc - (-0.85714)) < 0.01);
     assert(fabs(a - 7.28478) < 0.01);
-    cout << "v = 1, u = 3, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
+    cout << "v = 1, u = 3\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n\n";
     d = density(x, 4, u, lam), m = mathexp(4, u, lam, 1), dis = dispersion(4, lam, u), exc = excess(4), a = asymmetry(4, u, lam);
     assert(fabs(d - 1.50204) < 0.01);
     assert(fabs(m - (-29.6457)) < 0.01);
     assert(fabs(dis - 0.363636) < 0.01);
     assert(fabs(exc - (-0.461538)) < 0.01);
     assert(fabs(a - (-136544.32)) < 0.01); 
-    cout << "v = 4, u = 3, f(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
-    cout << "All tests are completed\n";
+    cout << "v = 4, u = 3\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
+    cout << "All tests are complete\n\n";
 }
