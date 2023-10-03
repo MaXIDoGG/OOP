@@ -12,11 +12,7 @@ vector<double> random_sample_standart(int N, double v) {
 //Вывод значений ф-ии плотности по выборке в файл
 void result_to_file_standart(vector<double> sample, double v, double u, double lam) {
     ofstream out;
-    if(u != 0 || lam != 1) {
-        out.open("txts/Standart.txt");
-    } else {
-        out.open("txts/StandartULAM.txt");
-    }
+    out.open("txts/Standart.txt");
     int i = 0;
     while(sample[i]) {
         out << density(sample[i], v, u, lam) << endl;

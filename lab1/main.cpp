@@ -94,8 +94,6 @@ int main() {
             sample = random_sample_standart(n, v);
             result_to_file_standart(sample, v, u, lam);
             result_to_file_empirical(sample, 0);
-            result_to_file_standart(sample, v2, u2, lam2);
-            result_to_file_empirical(sample, 1);
             sample.clear(); 
             sample = random_sample_mix(p, v, v2, n);
             result_to_file_mix(sample, p, v, u, lam, v2, u2, lam2);

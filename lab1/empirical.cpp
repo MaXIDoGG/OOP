@@ -8,8 +8,6 @@ void result_to_file_empirical(vector<double> sample, int mod) {
     if(mod == 0)
         out.open("txts/EmpiricalStd.txt");
     else if(mod == 1)
-        out.open("txts/EmpiricalULAM.txt");
-    else if(mod == 2)
         out.open("txts/EmpiricalMIX.txt");
     int i = 0;
     while(sample[i]) {
