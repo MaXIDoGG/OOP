@@ -77,7 +77,7 @@ int main() {
             cout << "Введите параметр формы v1: ";
             cin >> v;
             cout << "Введите параметр формы v2: ";
-            cin >> v;
+            cin >> v2;
             cout << "Введите параметр сдвига u1: ";
             cin >> u;
             cout << "Введите параметр сдвига u2: ";
@@ -97,7 +97,7 @@ int main() {
             sample.clear(); 
             sample = random_sample_mix(p, v, v2, n);
             result_to_file_mix(sample, p, v, u, lam, v2, u2, lam2);
-            result_to_file_empirical(sample, 2);
+            result_to_file_empirical(sample, 1);
             sample.clear();
             break;
         default:

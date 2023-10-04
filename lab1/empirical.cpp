@@ -10,8 +10,9 @@ void result_to_file_empirical(vector<double> sample, int mod) {
     else if(mod == 1)
         out.open("txts/EmpiricalMIX.txt");
     int i = 0;
+    sort(sample.begin(), sample.end());
     while(sample[i]) {
-        out << empirical_density(sample[i], sample) << endl;
+        out << sample[i] << " " << empirical_density(sample[i], sample) << endl;
         i++;
     }
     out.close();

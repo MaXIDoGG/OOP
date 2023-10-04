@@ -21,8 +21,9 @@ void  result_to_file_mix(vector<double> sample, double p, double v1, double u1, 
     ofstream out;
     out.open("txts/Mix.txt");
     int i = 0;
+    sort(sample.begin(), sample.end());
     while(sample[i]) {
-        out << densityMix(sample[i], p, v1, u1, lam1, v2, u2, lam2) << endl;
+        out << sample[i] << " " << densityMix(sample[i], p, v1, u1, lam1, v2, u2, lam2) << endl;
         i++;
     }
     out.close();

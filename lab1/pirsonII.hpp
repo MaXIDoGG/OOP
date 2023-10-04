@@ -4,6 +4,7 @@
 #include <random>
 #include <math.h>
 #include <cassert>
+#include <algorithm>
 #include <fstream>
 
 using namespace std;

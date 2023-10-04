@@ -14,8 +14,9 @@ void result_to_file_standart(vector<double> sample, double v, double u, double l
     ofstream out;
     out.open("txts/Standart.txt");
     int i = 0;
+    sort(sample.begin(), sample.end());
     while(sample[i]) {
-        out << density(sample[i], v, u, lam) << endl;
+        out << sample[i] << " " << density(sample[i], v, u, lam) << endl;
         i++;
     }
     out.close();
