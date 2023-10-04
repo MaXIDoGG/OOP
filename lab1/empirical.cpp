@@ -5,14 +5,20 @@ using namespace std;
 //ВЫвод результата ф-ии плотности эмпирического распределения в файл
 void result_to_file_empirical(vector<double> sample, int mod) {
     ofstream out;
-    if(mod == 0)
+    ofstream out2;
+    if(mod == 0) {
         out.open("txts/EmpiricalStd.txt");
-    else if(mod == 1)
+        out2.open("txts/EmpiricalStdX.txt");
+    }
+    else if(mod == 1) {
         out.open("txts/EmpiricalMIX.txt");
+        out2.open("txts/EmpiricalMIXX.txt");
+    }
     int i = 0;
     sort(sample.begin(), sample.end());
     while(sample[i]) {
-        out << sample[i] << " " << empirical_density(sample[i], sample) << endl;
+        out << empirical_density(sample[i], sample) << endl;
+        out2 << sample[i] << endl;
         i++;
     }
     out.close();
@@ -47,6 +53,7 @@ int get_interval_index(const vector<double>& intervals, const double x) {
 			return i;
 		}
 	}
+    return 0;
 }
 
 double empirical_density(const double x, const vector<double>& sample) {

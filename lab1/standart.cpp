@@ -9,14 +9,27 @@ vector<double> random_sample_standart(int N, double v) {
     return sample;
 }
 
+// Сдвиг масштаб выборки
+vector<double> random_sample_for_empstd(vector<double> sample, double u, double lam) {
+    int i = 0;
+    while(sample[i]) {
+        sample[i] += u;
+        sample[i] *= lam;
+        i++;
+    }
+    return sample;
+}
+
 //Вывод значений ф-ии плотности по выборке в файл
 void result_to_file_standart(vector<double> sample, double v, double u, double lam) {
-    ofstream out;
+    ofstream out, out2;
     out.open("txts/Standart.txt");
+    out2.open("txts/StandartX.txt");
     int i = 0;
     sort(sample.begin(), sample.end());
     while(sample[i]) {
-        out << sample[i] << " " << density(sample[i], v, u, lam) << endl;
+        out << density(sample[i], v, u, lam) << endl;
+        out2 << sample[i] << endl;
         i++;
     }
     out.close();

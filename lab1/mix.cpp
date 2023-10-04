@@ -8,22 +8,48 @@
 //�-�� ���������
 
 //Генерация выборки для смеси распределений
-vector<double> random_sample_mix(double p, double v1, double v2, int N) {
-    vector<double> sample;
+vector<vector<double> > random_sample_mix(double p, double v1, double v2, int N) {
+    vector<vector<double> > sample;
     for(int i = 0; i < N; i++) {
         sample.push_back(generateMix(p, v1, v2));
     }
     return sample;
 }
 
+// Сдвиг масштаб выборки
+vector<double> random_sample_for_empmix(vector<vector<double> > sample, double u, double lam, double p, double u2, double lam2, int N) {
+    int i = 0;
+    vector<double> res;
+    while(i < N) {
+        if (sample[i][1] > p)
+            res.push_back((sample[i][0] + u)*lam);
+        else
+            res.push_back((sample[i][0] + u2)*lam2);
+        i++; 
+    }
+    return res;
+}
+
+vector<double> help(vector<vector<double> > sample, int n) {
+    vector<double> res;
+    int i = 0;
+    while(i < n) {
+        res.push_back(sample[i][0]);
+        i++;
+    }
+    return res;
+}
+
 //Вывод результата ф-ии плотности для семси распределений в файл
 void  result_to_file_mix(vector<double> sample, double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
-    ofstream out;
+    ofstream out, out2;
     out.open("txts/Mix.txt");
+    out2.open("txts/MixX.txt");
     int i = 0;
     sort(sample.begin(), sample.end());
     while(sample[i]) {
-        out << sample[i] << " " << densityMix(sample[i], p, v1, u1, lam1, v2, u2, lam2) << endl;
+        out << densityMix(sample[i], p, v1, u1, lam1, v2, u2, lam2) << endl;
+        out2 << sample[i] << endl;
         i++;
     }
     out.close();
@@ -95,10 +121,18 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
 }
 
 //������������� ��������� ��������
-double generateMix(double p, double v1, double v2) {
+vector<double> generateMix(double p, double v1, double v2) {
     double r = Rgenerate();
-    if (r > p) return Xgenerate(v1);
-    else return Xgenerate(v2);
+    vector<double> res;
+    if (r > p) { 
+        res.push_back(Xgenerate(v1));
+        res.push_back(r); 
+    }
+    else  {
+        res.push_back(Xgenerate(v2));
+        res.push_back(r);  
+    }
+    return res;
 }
 
 void testMix() {
