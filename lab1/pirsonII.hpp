@@ -20,4 +20,3 @@ double asymmetry(double v, double u, double lam);
 void testStandart();
 vector<double> random_sample_standart(int N, double v);
 void result_to_file_standart(vector<double> sample, double v, double u, double lam);
-vector<double> random_sample_for_empstd(vector<double> sample, double u, double lam);

@@ -7,37 +7,20 @@
 
 //�-�� ���������
 
-//Генерация выборки для смеси распределений
-vector<vector<double> > random_sample_mix(double p, double v1, double v2, int N) {
-    vector<vector<double> > sample;
-    for(int i = 0; i < N; i++) {
+//Генерация выборки для смеси распределени
+vector<double> random_sample_mix(double p, double v1, double v2, int n) {
+    vector<double> sample;
+    for(int i = 0; i < n; i++) {
         sample.push_back(generateMix(p, v1, v2));
     }
     return sample;
 }
 
-// Сдвиг масштаб выборки
-vector<double> random_sample_for_empmix(vector<vector<double> > sample, double u, double lam, double p, double u2, double lam2, int N) {
-    int i = 0;
-    vector<double> res;
-    while(i < N) {
-        if (sample[i][1] > p)
-            res.push_back((sample[i][0] + u)*lam);
-        else
-            res.push_back((sample[i][0] + u2)*lam2);
-        i++; 
-    }
-    return res;
-}
-
-vector<double> help(vector<vector<double> > sample, int n) {
-    vector<double> res;
-    int i = 0;
-    while(i < n) {
-        res.push_back(sample[i][0]);
-        i++;
-    }
-    return res;
+//Подготовка выборки для вычисления эмперических характеристик
+vector<double> random_sample_empmix(vector<double> sample, double p, double v1, double v2, int n) {
+    for(int i = 0; i < n; i++)
+        sample.push_back(generateMix(p, v1, v2));
+    return sample;
 }
 
 //Вывод результата ф-ии плотности для семси распределений в файл
@@ -78,7 +61,7 @@ double dispersionMix(double p, double v1, double u1, double lam1, double v2, dou
     double mathExp2 = mathexp(v2, u2, lam2, 1);
     double dispersion1 = dispersion(v1, lam1, u1);
     double dispersion2 = dispersion(v2, lam2, u2);
-    double result = (1 - p) * (pow(mathExp1, 2) + dispersion1) + p * (pow(mathExp2, 2) + dispersion2) - pow(mathExpMix, 2); 
+    double result = (1 - p) * (pow(mathExp1, 2) + dispersion1) + p * (pow(mathExp2, 2) + dispersion2) - pow(mathExpMix, 2);
     return result;
 }
 
@@ -93,7 +76,7 @@ double asymmetryMix(double p, double v1, double u1, double lam1, double v2, doub
     double assymetry1 = asymmetry(v1, u1, lam1);
     double assymetry2 = asymmetry(v2, u2, lam2);
     double result = 1 / pow(dispersionMixx, 3 / 2) * (
-        (1 - p) * (pow(mathExp1 - mathExpMix, 3) + 3 * (mathExp1 - mathExpMix) * dispersion1 + pow(dispersion1, 3/2)*assymetry1) + 
+        (1 - p) * (pow(mathExp1 - mathExpMix, 3) + 3 * (mathExp1 - mathExpMix) * dispersion1 + pow(dispersion1, 3/2)*assymetry1) +
         p * (pow(mathExp2 - mathExpMix, 3) + 3 * (mathExp2 - mathExpMix) * dispersion2 + pow(dispersion2, 3 / 2) * assymetry2)
         );
     return result;
@@ -112,8 +95,8 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
     double exces1 = excess(v1);
     double exces2 = excess(v2);
     double result = 1 / pow(dispersionMixx, 2) * (
-        (1 - p) * (pow(mathExp1 - mathExpMix, 4) + 6 * pow(mathExp1 - mathExpMix, 2) * dispersion1 + 4 * (mathExp1 - mathExpMix) * 
-            pow(dispersion1, 3 / 2) * assymetry1 + pow(dispersion1, 2) * (exces1 + 3)) + 
+        (1 - p) * (pow(mathExp1 - mathExpMix, 4) + 6 * pow(mathExp1 - mathExpMix, 2) * dispersion1 + 4 * (mathExp1 - mathExpMix) *
+            pow(dispersion1, 3 / 2) * assymetry1 + pow(dispersion1, 2) * (exces1 + 3)) +
         p * (pow(mathExp2 - mathExpMix, 4) + 6 * pow(mathExp2 - mathExpMix, 2) * dispersion2 + 4 * (mathExp2 - mathExpMix) *
             pow(dispersion2, 3 / 2) * assymetry2 + pow(dispersion2, 2) * (exces2 + 3))
         ) - 3;
@@ -121,17 +104,12 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
 }
 
 //������������� ��������� ��������
-vector<double> generateMix(double p, double v1, double v2) {
-    double r = Rgenerate();
-    vector<double> res;
-    if (r > p) { 
-        res.push_back(Xgenerate(v1));
-        res.push_back(r); 
-    }
-    else  {
-        res.push_back(Xgenerate(v2));
-        res.push_back(r);  
-    }
+double generateMix(double p, double v1, double v2) {
+    double r = Rgenerate(), res = 0;
+    if (r > p)
+        res = Xgenerate(v1);
+    else
+        res = Xgenerate(v2);
     return res;
 }
 
