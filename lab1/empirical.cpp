@@ -20,33 +20,64 @@ void result_to_file_empirical(vector<double> sample, int mod) {
 }
 
 // Эмпирическая плотность
-double empirical_density(double x, const vector<double>& sample) {
-    int n = sample.size();
-    int k = static_cast<int>(ceil(1 + 3.222 * log(n)));
-    double min_x = *min_element(sample.begin(), sample.end());
-    double max_x = *max_element(sample.begin(), sample.end());
-    double range = max_x - min_x;
-    double h = range / k;
-    vector<int> counts(k, 0);
-
-    for (double xi : sample) {
-        if (xi >= min_x && xi <= max_x) {
-            int group = static_cast<int>((xi - min_x) / h);
-            counts[group]++;
-        }
-    }
-
-    int count = 0;
-    for (int i = 0; i < k; i++) {
-        if (min_x + (i + 1) * h <= x) {
-            count += counts[i];
-        }
-    }
-
-    double density = static_cast<double>(count) / (n * h);
-    return density;
+double delta_calc(const double n, const double min, const double max) {
+	return (max - min) / ((int)log2(n) + 1);
 }
 
+vector<double> create_intervals(const double delta, const double min, const double max) {
+	vector<double> intervals;
+	double slider = min;
+	intervals.push_back(slider);
+	while (slider < max) {
+		intervals.push_back(slider + delta);
+		slider += delta;
+	}
+	return intervals;
+}
+
+int get_interval_index(const vector<double>& intervals, const double x) {
+	if (intervals.size() < 2) {
+		return 0;
+	}
+	if (x >= intervals[intervals.size() - 2] && x <= intervals[intervals.size() - 1]) {
+		return intervals.size() - 2;
+	}
+	for (int i = 0; i < intervals.size() - 1; ++i) {
+		if (x >= intervals[i] && x < intervals[i + 1]) {
+			return i;
+		}
+	}
+}
+
+double empirical_density(const double x, const vector<double>& sample) {
+	double delta = delta_calc(sample.size(), sample[0], sample[sample.size() - 1]);
+	auto intervals = create_intervals(delta, sample[0], sample[sample.size() - 1]);
+	int indx = get_interval_index(intervals, x);
+	int left = 0;
+	int right = sample.size() - 1;
+	if (indx == 0) {
+		right = 0;
+		while (sample[right] < intervals[1]) {
+			++right;
+		}
+	}
+	else if (indx == intervals.size() - 2) {
+		left = sample.size() - 1;
+		while (sample[left] > intervals[intervals.size() - 2]) {
+			--left;
+		}
+	}
+	else {
+		while (sample[left] < intervals[indx]) {
+			++left;
+		}
+		right = left;
+		while (sample[right] < intervals[indx + 1]) {
+			++right;
+		}
+	}
+	return (right - left + 1) / (sample.size() * delta);
+}
 
 // Мат. ожидание
 double math_expectation(const vector<double>& sample) {
