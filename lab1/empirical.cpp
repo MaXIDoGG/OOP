@@ -25,11 +25,12 @@ void result_to_file_empirical(vector<double> sample, int mod) {
     cout << "Файл подготовлен\n";
 }
 
-// Эмпирическая плотность
+// Коэффициент Стерджесса
 double delta_calc(const double n, const double min, const double max) {
 	return (max - min) / ((int)log2(n) + 1);
 }
 
+// Создание интервалов для выборки
 vector<double> create_intervals(const double delta, const double min, const double max) {
 	vector<double> intervals;
 	double slider = min;
@@ -41,6 +42,7 @@ vector<double> create_intervals(const double delta, const double min, const doub
 	return intervals;
 }
 
+// Получение индекса интервала
 int get_interval_index(const vector<double>& intervals, const double x) {
 	if (intervals.size() < 2) {
 		return 0;
@@ -56,6 +58,7 @@ int get_interval_index(const vector<double>& intervals, const double x) {
     return 0;
 }
 
+// Эмпирическая плотность
 double empirical_density(const double x, const vector<double>& sample) {
 	double delta = delta_calc(sample.size(), sample[0], sample[sample.size() - 1]);
 	auto intervals = create_intervals(delta, sample[0], sample[sample.size() - 1]);
