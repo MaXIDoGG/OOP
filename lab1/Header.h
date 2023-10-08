@@ -47,7 +47,7 @@ double Xgenerate(double v);
 double dispersion(double v, double lam, double u);
 double densityM(double x, double v);
 double density(double x, double v, double u, double lam);
-double mathexp(double v, double u, double lam, int n);
+double mathexp(double u);
 double asymmetry(double v, double u, double lam);
 void testStandart();
 vector<double> random_sample_standart(int N, double v);
