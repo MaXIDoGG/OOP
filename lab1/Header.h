@@ -33,23 +33,19 @@ double mathexpMix(double p, double v1, double u1, double lam1, double v2, double
 double dispersionMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2);
 double asymmetryMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2);
 double excesMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2);
-vector<double> generateMix(double p, double v1, double v2);
+double generateMix(double p, double v1, double v2);
 void testMix();
-vector<vector<double> > random_sample_mix(double p, double v1, double v2, int N);
-vector<double> random_sample_for_empmix(vector<vector<double> > sample, double u, double lam, double p, double u2, double lam2, int N);
+vector<double> random_sample_mix(double p, double v1, double v2, int N);
 void  result_to_file_mix(vector<double> sample, double p, double v1, double u1, double lam1, double v2, double u2, double lam2);
-vector<double> help(vector<vector<double> > sample, int n);
 
 //standart
 double excess(double v);
 double Rgenerate();
 double Xgenerate(double v);
 double dispersion(double v, double lam, double u);
-double densityM(double x, double v);
 double density(double x, double v, double u, double lam);
 double mathexp(double u);
 double asymmetry(double v, double u, double lam);
 void testStandart();
 vector<double> random_sample_standart(int N, double v);
 void result_to_file_standart(vector<double> sample, double v, double u, double lam);
-vector<double> random_sample_for_empstd(vector<double> sample, double u, double lam);

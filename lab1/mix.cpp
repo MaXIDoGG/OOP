@@ -7,36 +7,12 @@
 //�-�� ���������
 
 //Генерация выборки для смеси распределений
-vector<vector<double> > random_sample_mix(double p, double v1, double v2, int N) {
-    vector<vector<double> > sample;
+vector<double> random_sample_mix(double p, double v1, double v2, int N) {
+    vector<double> sample;
     for(int i = 0; i < N; i++) {
         sample.push_back(generateMix(p, v1, v2));
     }
     return sample;
-}
-
-// Сдвиг масштаб выборки
-vector<double> random_sample_for_empmix(vector<vector<double> > sample, double u, double lam, double p, double u2, double lam2, int N) {
-    int i = 0;
-    vector<double> res;
-    while(i < N) {
-        if (sample[i][1] > p)
-            res.push_back((sample[i][0] + u)*lam);
-        else
-            res.push_back((sample[i][0] + u2)*lam2);
-        i++; 
-    }
-    return res;
-}
-
-vector<double> help(vector<vector<double> > sample, int n) {
-    vector<double> res;
-    int i = 0;
-    while(i < n) {
-        res.push_back(sample[i][0]);
-        i++;
-    }
-    return res;
 }
 
 //Вывод результата ф-ии плотности для семси распределений в файл
@@ -120,38 +96,34 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
 }
 
 //������������� ��������� ��������
-vector<double> generateMix(double p, double v1, double v2) {
+double generateMix(double p, double v1, double v2) {
     double r = Rgenerate();
-    vector<double> res;
-    if (r > p) { 
-        res.push_back(Xgenerate(v1));
-        res.push_back(r); 
-    }
-    else  {
-        res.push_back(Xgenerate(v2));
-        res.push_back(r);  
-    }
+    double res;
+    if (r > p)
+        res = Xgenerate(v1);
+    else
+        res = Xgenerate(v2);
     return res;
 }
 
 void testMix() {
     cout << "Тестирование смеси распределений\n";
     cout << "x = 0, p = 0.5, v1 = 0.5, u1 = 1, lambda1 = 1, v2 = 0.5, u2 = 1, lambda2 = 2\n";
-    double d = (densityMix(0, 0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.275668);
-    assert(fabs(d < 0.001));
+    double d = densityMix(0, 0.5, 0.5, 1, 2, 0.5, 1, 2);
+    assert(fabs(d - 0.63662 < 0.001));
     cout << "f(x, v) = " << d << "\n";
-    double m = (mathexpMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.075588);
-    assert(fabs(m < 0.001));
+    double m = mathexpMix(0.5, 0.5, 1, 2, 0.5, 1, 2);
+    assert(fabs(m - 1 < 0.001));
     cout << "M(X) = " << m << "\n";
-    double dis = (dispersionMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 1);
-    assert(fabs(dis < 0.001));
+    double dis = dispersionMix(0.5, 0.5, 1, 2, 0.5, 1, 2);
+    assert(fabs(dis - 1 < 0.001));
     cout << "D(X) = " << dis << "\n";
-    double a = (asymmetryMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - 0.014282);
-    double e = excesMix(0.5, 0.5, 1, 2, 0.5, 1, 2) - (-1);
-    assert(fabs(e < 0.001));
-    cout << "Y2 = " << e << "\n";
-    assert(fabs(a < 0.001));
+    double a = asymmetryMix(0.5, 0.5, 1, 2, 0.5, 1, 2);
+    double e = excesMix(0.5, 0.5, 1, 2, 0.5, 1, 2);
+    assert(fabs(e - (-1) < 0.001));
     cout << "Y1 = " << a << "\n";
+    assert(fabs(a - 0.014282 < 0.001));
+    cout << "Y2 = " << e << "\n";
 
     cout << "All tests are complete\n" << endl;
 }

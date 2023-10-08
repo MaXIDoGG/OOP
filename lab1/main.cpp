@@ -3,9 +3,7 @@
 int main() {
     int i = 0, j = 0, n = 0;
     double v = 0, u = 0, lam = 0, p = 0, x = 0, v2 = 0, u2 = 0, lam2 = 0;
-    vector<double> sample, sample2;
-    vector<vector<double> > samplemix;
-    string filename;
+    vector<double> sample;
     do {
         cout << "1: Распределение Пирсона типа II(R-распределение)\n2: Распеределение в виде смеси двух распределений\n3: Запуск тестов\n4: Подготовить файлы с результатами\n0: Выход\n";
         cin >> i;
@@ -22,21 +20,19 @@ int main() {
             cout << "Введите размер выборки: ";
             cin >> n;
             sample = random_sample_standart(n, v);
-            sample2 = random_sample_for_empstd(sample, u, lam);
-            sample.clear();
             cout << "Функция плотности в случайной точке = " << density(x, v, u, lam) << "\n";
             cout << "Функция плотности при x=0 = " << density(0, v, u, lam) << "\n";
             cout << "Дисперсия = " << dispersion(v, lam, u) << "\n";
             cout << "Эксцесс = " << excess(v) << "\n";
-            cout << "Математическое ожидание = " << mathexp(v, u, lam, 1) << "\n";
+            cout << "Математическое ожидание = " << mathexp(u) << "\n";
             cout << "Асимметрия = " << asymmetry(v, u, lam) << "\n";
             cout << "==Эмпирические характеристики==\n";
-            cout << "Функция плотности при x=0 = " << empirical_density(0, sample2) << "\n";
-            cout << "Дисперсия = " << dispersion(sample2) << "\n";
-            cout << "Эксцесс = " << EmpExcess(sample2) << "\n";
-            cout << "Математическое ожидание = " << math_expectation(sample2) << "\n";
-            cout << "Асимметрия = " << asymmetry(sample2) << "\n";
-            sample2.clear();
+            cout << "Функция плотности при x=0 = " << empirical_density(0, sample) << "\n";
+            cout << "Дисперсия = " << dispersion(sample) << "\n";
+            cout << "Эксцесс = " << EmpExcess(sample) << "\n";
+            cout << "Математическое ожидание = " << math_expectation(sample) << "\n";
+            cout << "Асимметрия = " << asymmetry(sample) << "\n";
+            sample.clear();
             break;
         case 2:
             cout << "Введите параметр формы v1: ";
@@ -55,21 +51,21 @@ int main() {
             cin >> p;
             cout << "Введите размер выборки: ";
             cin >> n;
-            samplemix = random_sample_mix(p, v, v2, n);
-            sample2 = random_sample_for_empmix(samplemix, u, lam, p, u2, lam2, n);
-            cout << "Функция плотноcти в случайной точке = " << densityMix(samplemix[0][0], p, v, u, lam, v2, u2, lam2) << "\n";
+            x = generateMix(p, v, v2);
+            sample = random_sample_mix(p, v, v2, n);
+            cout << "Функция плотноcти в случайной точке = " << densityMix(x, p, v, u, lam, v2, u2, lam2) << "\n";
             cout << "Функция плотности при x=0 = " << densityMix(0, p, v, u, lam, v2, u2, lam2) << "\n";
             cout << "Дисперсия = " << dispersionMix(p, v, u, lam, v2, u2, lam2) << "\n";
             cout << "Эксцесс = " << excesMix(p, v, u, lam, v2, u2, lam2) << "\n";
             cout << "Математическое ожидание = " << mathexpMix(p, v, u, lam, v2, u2, lam2) << "\n";
             cout << "Асимметрия = " << asymmetryMix(p, v, u, lam, v2, u2, lam2) << "\n";
             cout << "==Эмпирические характеристики==\n";
-            cout << "Функция плотности при x=0 = " << empirical_density(0, sample2) << "\n";
-            cout << "Дисперсия = " << dispersion(sample2) << "\n";
-            cout << "Эксцесс = " << EmpExcess(sample2) << "\n";
-            cout << "Математическое ожидание = " << math_expectation(sample2) << "\n";
-            cout << "Асимметрия = " << asymmetry(sample2) << "\n";
-            sample2.clear(); samplemix.clear();
+            cout << "Функция плотности при x=0 = " << empirical_density(0, sample) << "\n";
+            cout << "Дисперсия = " << dispersion(sample) << "\n";
+            cout << "Эксцесс = " << EmpExcess(sample) << "\n";
+            cout << "Математическое ожидание = " << math_expectation(sample) << "\n";
+            cout << "Асимметрия = " << asymmetry(sample) << "\n";
+            sample.clear();
             break;
         case 3:
             testStandart();
@@ -93,18 +89,15 @@ int main() {
             cin >> p;
             cout << "Введите размер выборки: ";
             cin >> n;
-            sample.clear(); sample2.clear();
+            sample.clear();
             sample = random_sample_standart(n, v);
-            sample2 = random_sample_for_empstd(sample, u, lam);
             result_to_file_standart(sample, v, u, lam);
-            result_to_file_empirical(sample2, 0);
-            sample.clear(); sample2.clear(); 
-            samplemix = random_sample_mix(p, v, v2, n);
-            sample2 = random_sample_for_empmix(samplemix, u, lam, p, u2, lam2, n);
-            sample = help(samplemix, n);
+            result_to_file_empirical(sample, 0);
+            sample.clear();
+            sample = random_sample_mix(p, v, v2, n);
             result_to_file_mix(sample, p, v, u, lam, v2, u2, lam2);
-            result_to_file_empirical(sample2, 1);
-            sample.clear(); sample2.clear(); samplemix.clear();
+            result_to_file_empirical(sample, 1);
+            sample.clear();
             break;
         default:
             cout << "Повторите попытку\n";

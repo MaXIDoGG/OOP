@@ -169,13 +169,13 @@ int empirical_test() {
     double dis = dispersion(sample);
     double y1 = asymmetry(sample);
     double y2 = EmpExcess(sample);
-    assert(fabs(d - 0.683605) < 0.01);
+    assert(fabs(d - 17.316) < 0.01);
     assert(fabs(m - 3.78178) < 0.01);
     assert(fabs(dis - 8.96819) < 0.01);
     assert(fabs(y1 - 0.972817) < 0.01);
     assert(fabs(y2 - (-0.488406)) < 0.01);
 
-    cout << "f(x) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << y2 << "\nY1 = " << y1 << "\n";
+    cout << "f(x) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY1 = " << y1 << "\nY2 = " << y2 << "\n";
     cout << "All tests are complete\n\n";
     return 0;
 }

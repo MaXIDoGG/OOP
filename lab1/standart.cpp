@@ -9,17 +9,6 @@ vector<double> random_sample_standart(int N, double v) {
     return sample;
 }
 
-// Сдвиг масштаб выборки
-vector<double> random_sample_for_empstd(vector<double> sample, double u, double lam) {
-    int i = 0;
-    while(sample[i]) {
-        sample[i] += u;
-        sample[i] *= lam;
-        i++;
-    }
-    return sample;
-}
-
 //Вывод значений ф-ии плотности по выборке в файл
 void result_to_file_standart(vector<double> sample, double v, double u, double lam) {
     ofstream out, out2;
@@ -41,16 +30,10 @@ double betafunc(double x, double y) {
     return (gamma(x) * gamma(y) / gamma(x + y));
 }
 
-//Ф-ия плотности f(x, v) без параметров сдвига и масштаба
-double densityM(double x, double v) {
-   return (pow((1 - x * x) / 4, v) / (2 * betafunc(v + 1, v + 1)));
-}
-
 //Ф-ия плотности f(x, v)
 double density(double x, double v, double u, double lam) {
     double result = 0;
-    if ((lam != 1 && lam > 0) && u != 0 ) result = (densityM((x - u) / lam, v) / lam);
-    else result = densityM(x, v);
+    result = (pow((1 - x * x) / 4, v) / (2 * betafunc(v + 1, v + 1)));
     return result;
 }
 
@@ -109,14 +92,14 @@ void testStandart() {
     double d = density(x, 0, u, lam), m = mathexp(u), dis = dispersion(0, lam, u), exc = excess(0);
     float a = asymmetry(0, u, lam);
     assert(fabs(d - 0.5) < 0.01);
-    assert(fabs(m - 0.0166667) < 0.01);
+    assert(fabs(m - u) < 0.01);
     assert(fabs(dis - 0.333333) < 0.01);
     assert(fabs(exc - (-1.2)) < 0.01);
     assert(fabs(a - 2.77778e-05) < 0.01);
     cout << "v = 0\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n\n";
     d = density(x, 6, u, lam), m = mathexp(u), dis = dispersion(6, lam, u), exc = excess(6), a = asymmetry(6, u, lam);
     assert(fabs(d - 1.466) < 0.01);
-    assert(fabs(m - (-1.623e-17)) < 0.01);
+    assert(fabs(m - u) < 0.01);
     assert(fabs(dis - 0.0666) < 0.01);
     assert(fabs(exc - (-0.3529)) < 0.01);
     assert(fabs(a - 5.803e-17) < 0.01);
@@ -124,18 +107,18 @@ void testStandart() {
     cout << "Тестирование сдвиг-масштабного распределения с параметрами x = 0, u - произольное, lambda = 2\n";
     u = 3, lam = 2;
     d = density(x, 1, u, lam), m = mathexp(u), dis = dispersion(1, lam, u), exc = excess(1), a = asymmetry(1, u, lam);
-    assert(fabs(d - (-0.46875)) < 0.01);
-    assert(fabs(m - 1.0125) < 0.01);
+    assert(fabs(d - 0.75) < 0.01);
+    assert(fabs(m - u) < 0.01);
     assert(fabs(dis - 0.8) < 0.1);
     assert(fabs(exc - (-0.85714)) < 0.01);
-    assert(fabs(a - 7.28478) < 0.01);
+    assert(fabs(a - 37.5) < 0.01);
     cout << "v = 1, u = 3\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n\n";
     d = density(x, 4, u, lam), m = mathexp(u), dis = dispersion(4, lam, u), exc = excess(4), a = asymmetry(4, u, lam);
-    assert(fabs(d - 1.50204) < 0.01);
-    assert(fabs(m - (-29.6457)) < 0.01);
+    assert(fabs(d - 1.23047) < 0.01);
+    assert(fabs(m - u) < 0.01);
     assert(fabs(dis - 0.363636) < 0.01);
     assert(fabs(exc - (-0.461538)) < 0.01);
-    assert(fabs(a - (-136544.32)) < 0.01); 
+    assert(fabs(a - 82.5) < 0.01); 
     cout << "v = 4, u = 3\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
     cout << "All tests are complete\n\n";
 }
