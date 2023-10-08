@@ -1,10 +1,22 @@
-#include "pirsonII.hpp"
+#include "Header.h"
 
 //Генерация выборки для стандартного распределения
 vector<double> random_sample_standart(int N, double v) {
     vector<double> sample;
-    for(int i = 0; i < N; i++)
+    for(int i = 0; i < N; i++) {
         sample.push_back(Xgenerate(v));
+    }
+    return sample;
+}
+
+// Сдвиг масштаб выборки
+vector<double> random_sample_for_empstd(vector<double> sample, double u, double lam) {
+    int i = 0;
+    while(sample[i]) {
+        sample[i] += u;
+        sample[i] *= lam;
+        i++;
+    }
     return sample;
 }
 
@@ -16,7 +28,7 @@ void result_to_file_standart(vector<double> sample, double v, double u, double l
     int i = 0;
     sort(sample.begin(), sample.end());
     while(sample[i]) {
-        out << densityM(sample[i], v) << endl;
+        out << density(sample[i], v, u, lam) << endl;
         out2 << sample[i] << endl;
         i++;
     }
@@ -37,7 +49,8 @@ double densityM(double x, double v) {
 //Ф-ия плотности f(x, v)
 double density(double x, double v, double u, double lam) {
     double result = 0;
-    result = (densityM((x - u) / lam, v) / lam);
+    if ((lam != 1 && lam > 0) && u != 0 ) result = (densityM((x - u) / lam, v) / lam);
+    else result = densityM(x, v);
     return result;
 }
 
@@ -62,7 +75,7 @@ double Rgenerate() {
     return dis(gen);
 }
 
-//Моделирование случайной величины для стандартного распределения
+//Моделирование случайной величины
 double Xgenerate(double v) {
     random_device rd;
     mt19937 gen(rd());
@@ -72,32 +85,14 @@ double Xgenerate(double v) {
     else
         return (pow(1 - pow(Rgenerate(), 1 / (v + 0.5)), 0.5) * cos(2 * M_PI * Rgenerate()));
 }
-
-//Вспомогательная ф-ия для мат ожидания
-double helpforinteg(double x, double v, double u, double lam, int m) {
-    double result = 0;
-    if (lam != 0) result = (densityM((x - u) / lam, v) / lam);
-    else result = densityM(x, v);
-    return (result * pow(x, m));
-}
-
 //Мат. ожидание
-double mathexp(double v, double u, double lam, int m) {
-    if (lam == 1 && u == 0) return 0;
-    int i;
-    double result, h = 0.1, n = 0;
-    n = 2 / h;
-    result = h * (helpforinteg(-1, v, u, lam, n) + helpforinteg(1, v, u, lam, m)) / 6.0;
-    for(i = 1; i <= n; i++)
-	    result = result + 4.0 / 6.0 * h * helpforinteg(-1 + h * (i - 0.5), v, u, lam, m);
-    for(i = 1; i <= n-1; i++)
-	    result = result + 2.0 / 6.0 * h * helpforinteg(-1 + h * i, v, u, lam, m);
-    return result + u;
-}
+double mathexp(double u) {
+    if (u != 0) return u;
+    return 0;
+}   
 
 //Коэф. асимметрии
 double asymmetry(double v, double u, double lam) {
-    if (lam == 1 && u == 0) return 0;
     double result = 0;
     result = mathexp(v, u, lam, 3) - 3 * mathexp(v, u, lam, 2) * mathexp(v, u, lam, 1) + 2 * pow(mathexp(v, u, lam, 1), 3);
     result /= pow(dispersion(v, lam, u), 3 / 2);
@@ -136,7 +131,7 @@ void testStandart() {
     assert(fabs(m - (-29.6457)) < 0.01);
     assert(fabs(dis - 0.363636) < 0.01);
     assert(fabs(exc - (-0.461538)) < 0.01);
-    assert(fabs(a - (-136544.32)) < 0.01);
+    assert(fabs(a - (-136544.32)) < 0.01); 
     cout << "v = 4, u = 3\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
     cout << "All tests are complete\n\n";
 }

@@ -1,9 +1,6 @@
-#include "pirsonII.hpp"
-#include "mix.hpp"
-#include "empirical.hpp"
+#include "Header.h"
 
 int main() {
-    setlocale(LC_ALL, "Ru");
     int i = 0, j = 0, n = 0;
     double v = 0, u = 0, lam = 0, p = 0, x = 0, v2 = 0, u2 = 0, lam2 = 0;
     vector<double> sample, sample2;
@@ -25,6 +22,8 @@ int main() {
             cout << "Введите размер выборки: ";
             cin >> n;
             sample = random_sample_standart(n, v);
+            sample2 = random_sample_for_empstd(sample, u, lam);
+            sample.clear();
             cout << "Функция плотности в случайной точке = " << density(x, v, u, lam) << "\n";
             cout << "Функция плотности при x=0 = " << density(0, v, u, lam) << "\n";
             cout << "Дисперсия = " << dispersion(v, lam, u) << "\n";
@@ -32,12 +31,12 @@ int main() {
             cout << "Математическое ожидание = " << mathexp(v, u, lam, 1) << "\n";
             cout << "Асимметрия = " << asymmetry(v, u, lam) << "\n";
             cout << "==Эмпирические характеристики==\n";
-            cout << "Функция плотности при x=0 = " << empirical_density(0, sample) << "\n";
-            cout << "Дисперсия = " << dispersion(sample) << "\n";
-            cout << "Эксцесс = " << EmpExcess(sample) << "\n";
-            cout << "Математическое ожидание = " << math_expectation(sample) << "\n";
-            cout << "Асимметрия = " << asymmetry(sample) << "\n";
-            sample.clear();
+            cout << "Функция плотности при x=0 = " << empirical_density(0, sample2) << "\n";
+            cout << "Дисперсия = " << dispersion(sample2) << "\n";
+            cout << "Эксцесс = " << EmpExcess(sample2) << "\n";
+            cout << "Математическое ожидание = " << math_expectation(sample2) << "\n";
+            cout << "Асимметрия = " << asymmetry(sample2) << "\n";
+            sample2.clear();
             break;
         case 2:
             cout << "Введите параметр формы v1: ";
@@ -56,6 +55,8 @@ int main() {
             cin >> p;
             cout << "Введите размер выборки: ";
             cin >> n;
+            samplemix = random_sample_mix(p, v, v2, n);
+            sample2 = random_sample_for_empmix(samplemix, u, lam, p, u2, lam2, n);
             cout << "Функция плотноcти в случайной точке = " << densityMix(samplemix[0][0], p, v, u, lam, v2, u2, lam2) << "\n";
             cout << "Функция плотности при x=0 = " << densityMix(0, p, v, u, lam, v2, u2, lam2) << "\n";
             cout << "Дисперсия = " << dispersionMix(p, v, u, lam, v2, u2, lam2) << "\n";
@@ -92,9 +93,18 @@ int main() {
             cin >> p;
             cout << "Введите размер выборки: ";
             cin >> n;
+            sample.clear(); sample2.clear();
             sample = random_sample_standart(n, v);
+            sample2 = random_sample_for_empstd(sample, u, lam);
             result_to_file_standart(sample, v, u, lam);
-            result_to_file_empirical(sample, 0);
+            result_to_file_empirical(sample2, 0);
+            sample.clear(); sample2.clear(); 
+            samplemix = random_sample_mix(p, v, v2, n);
+            sample2 = random_sample_for_empmix(samplemix, u, lam, p, u2, lam2, n);
+            sample = help(samplemix, n);
+            result_to_file_mix(sample, p, v, u, lam, v2, u2, lam2);
+            result_to_file_empirical(sample2, 1);
+            sample.clear(); sample2.clear(); samplemix.clear();
             break;
         default:
             cout << "Повторите попытку\n";
