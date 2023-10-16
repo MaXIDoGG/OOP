@@ -1,4 +1,5 @@
 #include "Header.h"
+#include "StandartClass.h"
 
 //Генерация выборки для смеси распределений
 vector<double> random_sample_mix(double p, double v1, double v2, int N) {
@@ -9,7 +10,7 @@ vector<double> random_sample_mix(double p, double v1, double v2, int N) {
     return sample;
 }
 
-//Вывод результата ф-ии плотности для семси распределений в файл
+//Вывод результата ф-ии плотности для смеси распределений в файл
 void  result_to_file_mix(vector<double> sample, double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     ofstream out, out2;
     out.open("txts/Mix.txt");
@@ -27,16 +28,20 @@ void  result_to_file_mix(vector<double> sample, double p, double v1, double u1, 
 
 //Функция плотости
 double densityMix(double x, double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
-    double density1 = density(x, v1, u1, lam1);
-    double density2 = density(x, v2, u2, lam2);
+    Standart Func1 = Standart(v1, lam1, u1);
+    Standart Func2 = Standart(v2, lam2, u2);
+    double density1 = Func1.density(x);
+    double density2 = Func2.density(x);
     double result = (1 - p) * density1 + p * density2;
     return result;
 }
 
 //Математическое ожидание
 double mathexpMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
-    double mathExp1 = mathexp(u1);
-    double mathExp2 = mathexp(u2);
+    Standart Func1 = Standart(v1, lam1, u1);
+    Standart Func2 = Standart(v2, lam2, u2);
+    double mathExp1 = Func1.mathexp();
+    double mathExp2 = Func2.mathexp();
     double result = (1 - p) * mathExp1 + p * mathExp2;
     return result;
 }

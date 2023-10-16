@@ -88,7 +88,7 @@ double asymmetry(double v, double u, double lam) {
 
 void testStandart() {
     double x = 0, u = 0, lam = 1;
-    cout << "Тестирование стандартного распределения с параметрами x = 0, u = 0, lambda = 1\n";
+    cout << "Testing a standard distribution with parameters x = 0, u = 0, lambda = 1\n";
     double d = density(x, 0, u, lam), m = mathexp(u), dis = dispersion(0, lam, u), exc = excess(0);
     float a = asymmetry(0, u, lam);
     assert(fabs(d - 0.5) < 0.01);
