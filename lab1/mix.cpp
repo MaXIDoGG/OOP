@@ -1,11 +1,5 @@
 #include "Header.h"
 
-//v �������� ����� �� �� ��
-//u �������� ������ �� �� ��
-//lam �������� �������� �� �� ������
-
-//�-�� ���������
-
 //Генерация выборки для смеси распределений
 vector<double> random_sample_mix(double p, double v1, double v2, int N) {
     vector<double> sample;
@@ -31,6 +25,7 @@ void  result_to_file_mix(vector<double> sample, double p, double v1, double u1, 
     cout << "Файл подготовлен\n";
 }
 
+//Функция плотости
 double densityMix(double x, double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double density1 = density(x, v1, u1, lam1);
     double density2 = density(x, v2, u2, lam2);
@@ -38,7 +33,7 @@ double densityMix(double x, double p, double v1, double u1, double lam1, double 
     return result;
 }
 
-//�-�� ���. ��������
+//Математическое ожидание
 double mathexpMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExp1 = mathexp(u1);
     double mathExp2 = mathexp(u2);
@@ -46,7 +41,7 @@ double mathexpMix(double p, double v1, double u1, double lam1, double v2, double
     return result;
 }
 
-//�-�� ���������
+//Дисперсия
 double dispersionMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(u1);
@@ -57,7 +52,7 @@ double dispersionMix(double p, double v1, double u1, double lam1, double v2, dou
     return result;
 }
 
-//����. ����������
+//Асимметрия
 double asymmetryMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(u1);
@@ -74,7 +69,7 @@ double asymmetryMix(double p, double v1, double u1, double lam1, double v2, doub
     return result;
 }
 
-//�-�� ��������
+//Эксцесс
 double excesMix(double p, double v1, double u1, double lam1, double v2, double u2, double lam2) {
     double mathExpMix = mathexpMix(p, v1, u1, lam1, v2, u2, lam2);
     double mathExp1 = mathexp(u1);
@@ -95,7 +90,7 @@ double excesMix(double p, double v1, double u1, double lam1, double v2, double u
     return result;
 }
 
-//������������� ��������� ��������
+//Моделирование случайной величины
 double generateMix(double p, double v1, double v2) {
     double r = Rgenerate();
     double res;

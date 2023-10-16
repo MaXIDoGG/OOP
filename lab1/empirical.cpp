@@ -14,6 +14,10 @@ void result_to_file_empirical(vector<double> sample, int mod) {
         out.open("txts/EmpiricalMIX.txt");
         out2.open("txts/EmpiricalMIXX.txt");
     }
+    else if(mod == 2) {
+        out.open("txts/EmpEmpirical.txt");
+        out2.open("txts/EmpEmpiricalX.txt");
+    }
     int i = 0;
     sort(sample.begin(), sample.end());
     while(sample[i]) {

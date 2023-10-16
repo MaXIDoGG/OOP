@@ -3,7 +3,7 @@
 int main() {
     int i = 0, j = 0, n = 0;
     double v = 0, u = 0, lam = 0, p = 0, x = 0, v2 = 0, u2 = 0, lam2 = 0;
-    vector<double> sample;
+    vector<double> sample, sample2;
     do {
         cout << "1: Распределение Пирсона типа II(R-распределение)\n2: Распеределение в виде смеси двух распределений\n3: Запуск тестов\n4: Подготовить файлы с результатами\n0: Выход\n";
         cin >> i;
@@ -91,9 +91,11 @@ int main() {
             cin >> n;
             sample.clear();
             sample = random_sample_standart(n, v);
+            sample2 = random_sample_standart(n, v);
             result_to_file_standart(sample, v, u, lam);
             result_to_file_empirical(sample, 0);
-            sample.clear();
+            result_to_file_empirical(sample2, 2);
+            sample.clear(), sample2.clear();
             sample = random_sample_mix(p, v, v2, n);
             result_to_file_mix(sample, p, v, u, lam, v2, u2, lam2);
             result_to_file_empirical(sample, 1);
