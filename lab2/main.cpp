@@ -269,10 +269,14 @@ int main() {
                     if(k == '1') {
                         cout << "Enter filename: ";
                         cin >> filename;
+                        cin.clear();
+                        cin.ignore(100000, '\n');
                         Func.save(filename); 
                     } else if(k == '2') {
                         cout << "Enter filename: ";
                         cin >> filename;
+                        cin.clear();
+                        cin.ignore(100000, '\n');
                         Func.load(filename); 
                     } else if(k == '3') break;
                 } catch(int error) {
