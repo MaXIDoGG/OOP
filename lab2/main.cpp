@@ -61,7 +61,7 @@ int main() {
                     cout << "Try again\n";
                 }
             }
-            sample = random_sample_standart(n, Func.getForm());
+            sample = Func.random_sample_standart(n);
             cout << "Density function at a random point = " << Func.density(Func.Xgenerate()) << "\n";
             cout << "Density function at 0 point = " << Func.density(0) << "\n";
             cout << "Dispersion = " << Func.dispersion() << "\n";
@@ -171,6 +171,7 @@ int main() {
             break;
         case '3':
             testStandart();
+            testClass();
             testMix();
             empirical_test();
             break;
@@ -250,8 +251,8 @@ int main() {
                     cout << "Try again\n";
                 }
             }
-            sample = random_sample_standart(n, v);
-            result_to_file_standart(sample, Func);
+            sample = Func.random_sample_standart(n);
+            Func.result_to_file_standart(sample);
             result_to_file_empirical(sample, 0);
             sample.clear();
             sample = random_sample_mix(Func, p, n);

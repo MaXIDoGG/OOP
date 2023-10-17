@@ -66,6 +66,9 @@ public:
     // �-�� ��������
     double excess();
 
+    // Реализация случайной величины r, равномерно распределенной на интервале (0, 1)
+    double Rgenerate();
+
     // ������������� ��������� ��������
     double Xgenerate();
 
@@ -74,4 +77,10 @@ public:
 
     // ��������� �������� �� �����
     void load(string filename);
+
+    // Генерация выборки для стандартного распределения
+    vector<double> random_sample_standart(int N);
+
+    // Вывод значений ф-ии плотности по выборке в файл
+    void result_to_file_standart(vector<double> sample); 
 };

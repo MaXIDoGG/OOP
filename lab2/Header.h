@@ -32,5 +32,4 @@ void  result_to_file_mix(Standart Func1, Standart Func2, vector<double> sample, 
 //standart
 double Rgenerate();
 void testStandart();
-vector<double> random_sample_standart(int N, Standart Func);
-void result_to_file_standart(vector<double> sample, Standart Func);
+void testClass();

@@ -92,38 +92,11 @@ double excesMix(Standart Func1, Standart Func2, double p) {
 
 //Моделирование случайной величины
 double generateMix(Standart Func, double p) {
-    double r = Rgenerate();
+    double r = Func.Rgenerate();
     double res;
     if (r > p)
         res = Func.Xgenerate();
     else
         res = Func.Xgenerate();
     return res;
-}
-
-void testMix() {
-    cout << "Testing a mixture of distributions\n";
-    cout << "x = 0, p = 0.5, v1 = 0.5, u1 = 1, lambda1 = 1, v2 = 0.5, u2 = 1, lambda2 = 2\n";
-    Standart Func1;
-    Standart Func2;
-    Func1 = Standart(0.5, 2, 1);
-    Func2 = Standart(0.5, 2, 1);
-    double d = densityMix(Func1, Func2, 0, 0.5);
-    assert(fabs(d - 0.63662 < 0.001));
-    cout << "f(x, v) = " << d << "\n";
-    double m = mathexpMix(Func1, Func2, 0.5);
-    assert(fabs(m - 1 < 0.001));
-    cout << "M(X) = " << m << "\n";
-    double dis = dispersionMix(Func1, Func2, 0.5);
-    assert(fabs(dis - 1 < 0.001));
-    cout << "D(X) = " << dis << "\n";
-    double a = asymmetryMix(Func1, Func2, 0.5);
-    double e = excesMix(Func1, Func2, 0.5);
-    cout << e;
-    assert(fabs(e - (-1) < 0.001));
-    cout << "Y1 = " << a << "\n";
-    assert(fabs(a - 0.014282 < 0.001));
-    cout << "Y2 = " << e << "\n";
-
-    cout << "All tests are complete\n" << endl;
 }
