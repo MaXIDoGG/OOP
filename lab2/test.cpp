@@ -64,7 +64,6 @@ void testStandart() {
     assert(fabs(exc - (-0.461538)) < 0.01);
     assert(fabs(a - 82.5) < 0.01);
     cout << "v = 4, u = 3\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
-    cout << "All tests are complete\n\n";
 }
 
 int empirical_test() {
