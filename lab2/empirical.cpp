@@ -163,6 +163,7 @@ double random_var_simulation(const vector<double>& sample) {
     double max_x = *max_element(sample.begin(), sample.end());
     double x = min_x + (max_x - min_x) * dis(gen);
     return x;
+<<<<<<< HEAD
 }
 
 int empirical_test() {
@@ -182,4 +183,6 @@ int empirical_test() {
     cout << "f(x) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY1 = " << y1 << "\nY2 = " << y2 << "\n";
     cout << "All tests are complete\n\n";
     return 0;
+=======
+>>>>>>> evohox
 }

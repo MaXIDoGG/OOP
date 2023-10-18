@@ -1,5 +1,8 @@
 #include "Header.h"
+<<<<<<< HEAD
 #include "StandartClass.h"
+=======
+>>>>>>> evohox
 
 
 // -- Реализация класса Standart --
@@ -59,6 +62,18 @@ double Standart::excess() {
     return (-6 / (2 * v + 5));
 }
 
+<<<<<<< HEAD
+=======
+// Реализация случайной величины r, равномерно распределенной на интервале (0, 1)
+double Standart::Rgenerate() {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<double> dis(0, 1);
+    return dis(gen);
+}
+
+
+>>>>>>> evohox
 // Моделирование случайной величины
 double Standart::Xgenerate() {
     random_device rd;
@@ -85,39 +100,68 @@ void Standart::save(string filename) const {
 // Загрузить атрибуты из файла
 void Standart::load(string filename) {
     ifstream in;
+<<<<<<< HEAD
     in.open(filename);
     if (in.is_open())
     {
         in >> u;
         in >> lambda;
         in >> v;
+=======
+    double newU = 0, newLam = 0, newV = 0;
+    in.open(filename);
+    if (in.is_open())
+    {
+        in >> newU;
+        setShift(newU);
+        in >> newLam;
+        setScale(newLam);
+        in >> newV;
+        setForm(newV);
+>>>>>>> evohox
     } else throw 0;
     in.close();
 }
 
 // Генерация выборки для стандартного распределения
+<<<<<<< HEAD
 vector<double> random_sample_standart(int N, Standart Func) {
     vector<double> sample;
     for(int i = 0; i < N; i++) {
         sample.push_back(Func.Xgenerate());
+=======
+vector<double> Standart::random_sample_standart(int N) {
+    vector<double> sample;
+    for(int i = 0; i < N; i++) {
+        sample.push_back(Xgenerate());
+>>>>>>> evohox
     }
     return sample;
 }
 
 // Вывод значений ф-ии плотности по выборке в файл
+<<<<<<< HEAD
 void result_to_file_standart(vector<double> sample, Standart Func) {
+=======
+void Standart::result_to_file_standart(vector<double> sample) {
+>>>>>>> evohox
     ofstream out, out2;
     out.open("txts/Standart.txt");
     out2.open("txts/StandartX.txt");
     int i = 0;
     sort(sample.begin(), sample.end());
     while(sample[i]) {
+<<<<<<< HEAD
         out << Func.density(sample[i]) << endl;
+=======
+        out << density(sample[i]) << endl;
+>>>>>>> evohox
         out2 << sample[i] << endl;
         i++;
     }
     out.close();
     cout << "File is ready\n";
+<<<<<<< HEAD
 }
 
 // Реализация случайной величины r, равномерно распределенной на интервале (0, 1)
@@ -168,4 +212,6 @@ void testStandart() {
 //    assert(fabs(a - 82.5) < 0.01);
 //    cout << "v = 4, u = 3\nf(x,v) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY2 = " << exc << "\nY1 = " << a << "\n";
 //    cout << "All tests are complete\n\n";
+=======
+>>>>>>> evohox
 }
