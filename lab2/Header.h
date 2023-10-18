@@ -30,6 +30,5 @@ vector<double> random_sample_mix(Standart Func, double p, int N);
 void  result_to_file_mix(Standart Func1, Standart Func2, vector<double> sample, double p);
 
 //standart
-double Rgenerate();
 void testStandart();
 void testClass();

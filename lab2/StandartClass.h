@@ -1,6 +1,5 @@
 #include <iostream>
 #include <random>
-#include "vector"
 #include <math.h>
 #include <cassert>
 #include <algorithm>
@@ -40,7 +39,6 @@ public:
 
     // �������� �������� �����
     void setForm(double newV);
-
 
     // ���������� �������� ������
     double getShift();

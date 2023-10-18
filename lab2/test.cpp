@@ -93,7 +93,7 @@ void testClass() {
     assert(fabs(Func.getForm() - 0.5) < 0.01);
     assert(fabs(Func.getShift() - 1) < 0.01);
     assert(fabs(Func.getScale() - 2) < 0.01);
-    Func = Standart("txts/test.txt");
+    Func = Standart("txts/test1.txt");
     cout << "\nTest of Standart file constructor\nV = " <<  Func.getForm() << endl << "Lambda = " << Func.getScale() << endl << "U = " << Func.getShift() << endl;
     assert(fabs(Func.getForm() - 2) < 0.01);
     assert(fabs(Func.getShift() - 1) < 0.01);
@@ -101,8 +101,8 @@ void testClass() {
     Func.setForm(3); Func.setScale(4); Func.setShift(5);
     cout << "\nTest of save/load\nName of tets file: txts/test.txt\nnew V = " << Func.getForm() << endl << "new Lambda = " << Func.getScale() << endl << "new U = " << Func.getShift() << endl;
     try{
-        Func.save("txts/Ftest.txt");
-        Func.load("txts/Ftest.txt");
+        Func.save("txts/test2.txt");
+        Func.load("txts/test2.txt");
     } catch(int error) {
         if(error == 0) cout << "Exception raised: fstream I/O error\n";
         if(error == 1) cout << "Exception raised: false scale\n";
