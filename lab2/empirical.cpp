@@ -163,26 +163,4 @@ double random_var_simulation(const vector<double>& sample) {
     double max_x = *max_element(sample.begin(), sample.end());
     double x = min_x + (max_x - min_x) * dis(gen);
     return x;
-<<<<<<< HEAD
-}
-
-int empirical_test() {
-    cout << "Testing the empirical distribution\n";
-    vector<double> sample = {1.123, 1.123, 2.345, 2.345, 3.1, 5.1, 7.8, 9.9, 1.2};
-    double d = empirical_density(5, sample);
-    double m = math_expectation(sample);
-    double dis = dispersion(sample);
-    double y1 = asymmetry(sample);
-    double y2 = EmpExcess(sample);
-    assert(fabs(d - 17.316) < 0.01);
-    assert(fabs(m - 3.78178) < 0.01);
-    assert(fabs(dis - 8.96819) < 0.01);
-    assert(fabs(y1 - 0.972817) < 0.01);
-    assert(fabs(y2 - (-0.488406)) < 0.01);
-
-    cout << "f(x) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY1 = " << y1 << "\nY2 = " << y2 << "\n";
-    cout << "All tests are complete\n\n";
-    return 0;
-=======
->>>>>>> evohox
 }
