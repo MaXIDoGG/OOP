@@ -1,6 +1,5 @@
 #include "Header.h"
 
-
 // -- Реализация класса Standart --
 
 double Standart::density(double x) {

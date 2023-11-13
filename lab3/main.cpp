@@ -5,6 +5,7 @@ int main() {
     double v = 0, u = 0, lam = 0, p = 0, x = 0, v2 = 0, u2 = 0, lam2 = 0;
     vector<double> sample, sample2;
     Standart Func, Func2;
+    Mixture mix;
     string filename, filename2;
     char i = '0', k = '0';
     do {
@@ -119,22 +120,19 @@ int main() {
                         }
                         Func = Standart(v, lam, u);
                         Func2 = Standart(v2, lam2, u2);
+                        mix = Mixture(Func, Func2, p);
                     } else if(k == '2') {
-                        cout << "Enter first filename: ";
+                        cout << "Enter filename: ";
                         cin >> filename;
                         cin.clear();
                         cin.ignore(100000, '\n');
-                        Func = Standart(filename);
-                        cout << "Enter second filename: ";
-                        cin >> filename2;
-                        cin.clear();
-                        cin.ignore(100000, '\n');
-                        Func2 = Standart(filename2);
+                        mix = Mixture(filename);
                     }
                 } catch(int error) {
                     if(error == 0) cout << "Exception raised: fstream I/O error\n";
                     if(error == 1) cout << "Exception raised: false scale\n";
                     if(error == 2) cout << "Exception raised: false form\n";
+                    if(error == 3) cout << "Exception raised: false param of mix\n";
                     k = '0';
                 }
                 if(k == '1' || k =='2' || k == '3') {
@@ -153,14 +151,14 @@ int main() {
                 }
 
             }
-            x = generateMix(Func, p);
-            sample = random_sample_mix(Func, p, n);
-            cout << "Density function at a random point = " << densityMix(Func, Func2, Func.Xgenerate(), p) << "\n";
-            cout << "Density function at x=0 = " << densityMix(Func, Func2, 0, p) << "\n";
-            cout << "Dispersion = " << dispersionMix(Func, Func2, p) << "\n";
-            cout << "Excess = " << excesMix(Func, Func2, p) << "\n";
-            cout << "Mathematical expectation = " << mathexpMix(Func, Func2, p) << "\n";
-            cout << "Asymmetry = " << asymmetryMix(Func, Func2, p) << "\n";
+            x = mix.generateMix(Func);
+            sample = mix.random_sample_mix(Func, n);
+            cout << "Density function at a random point = " << mix.densityMix(Func, Func2, Func.Xgenerate()) << "\n";
+            cout << "Density function at x=0 = " << mix.densityMix(Func, Func2, 0) << "\n";
+            cout << "Dispersion = " << mix.dispersionMix(Func, Func2) << "\n";
+            cout << "Excess = " << mix.excesMix(Func, Func2) << "\n";
+            cout << "Mathematical expectation = " << mix.mathexpMix(Func, Func2) << "\n";
+            cout << "Asymmetry = " << mix.asymmetryMix(Func, Func2) << "\n";
             cout << "==Empirical characteristics==\n";
             cout << "Density function at x=0 = " << empirical_density(0, sample) << "\n";
             cout << "Dispersion = " << dispersion(sample) << "\n";
@@ -171,7 +169,6 @@ int main() {
             break;
         case '3':
             testStandart();
-            testClass();
             testMix();
             empirical_test();
             break;

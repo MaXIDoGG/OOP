@@ -1,8 +1,6 @@
 #define _USE_MATH_DEFINES
 
-#include "StandartClass.h"
-
-using namespace std;
+#include "MixClass.h"
 
 //emperical
 double delta_calc(const double n, const double min, const double max);
