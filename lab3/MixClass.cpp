@@ -21,23 +21,23 @@ Standart& Mixture::get_comp2() {
 }
 
 //Генерация выборки для смеси распределений
-vector<double> Mixture::random_sample_mix(Standart Func, int N) {
+vector<double> Mixture::random_sample_mix(int N) {
     vector<double> sample;
     for(int i = 0; i < N; i++) {
-        sample.push_back(generateMix(Func));
+        sample.push_back(generateMix());
     }
     return sample;
 }
 
 //Вывод результата ф-ии плотности для смеси распределений в файл
-void  Mixture::result_to_file_mix(Standart Func1, Standart Func2, vector<double> sample) {
+void  Mixture::result_to_file_mix(vector<double> sample) {
     ofstream out, out2;
     out.open("txts/Mix.txt");
     out2.open("txts/MixX.txt");
     int i = 0;
     sort(sample.begin(), sample.end());
     while(sample[i]) {
-        out << densityMix(Func1, Func2, sample[i]) << endl;
+        out << densityMix(sample[i]) << endl;
         out2 << sample[i] << endl;
         i++;
     }
@@ -56,42 +56,42 @@ void Mixture::setP(double newP){
 }
 
 //Функция плотости
-double Mixture::densityMix(Standart Func1, Standart Func2, double x) {
-    double density1 = Func1.density(x);
-    double density2 = Func2.density(x);
+double Mixture::densityMix(double x) {
+    double density1 = s1.density(x);
+    double density2 = s2.density(x);
     double result = (1 - p) * density1 + p * density2;
     return result;
 }
 
 //Математическое ожидание
-double Mixture::mathexpMix(Standart Func1, Standart Func2) {
-    double mathExp1 = Func1.mathexp();
-    double mathExp2 = Func2.mathexp();
+double Mixture::mathexpMix() {
+    double mathExp1 = s1.mathexp();
+    double mathExp2 = s2.mathexp();
     double result = (1 - p) * mathExp1 + p * mathExp2;
     return result;
 }
 
 //Дисперсия
-double Mixture::dispersionMix(Standart Func1, Standart Func2) {
-    double mathExpMix = mathexpMix(Func1, Func2);
-    double mathExp1 = Func1.mathexp();
-    double mathExp2 = Func2.mathexp();
-    double dispersion1 = Func1.dispersion();
-    double dispersion2 = Func2.dispersion();
+double Mixture::dispersionMix() {
+    double mathExpMix = mathexpMix();
+    double mathExp1 = s1.mathexp();
+    double mathExp2 = s2.mathexp();
+    double dispersion1 = s1.dispersion();
+    double dispersion2 = s2.dispersion();
     double result = (1 - p) * (pow(mathExp1, 2) + dispersion1) + p * (pow(mathExp2, 2) + dispersion2) - pow(mathExpMix, 2);
     return result;
 }
 
 //Асимметрия
-double Mixture::asymmetryMix(Standart Func1, Standart Func2) {
-    double mathExpMix = mathexpMix(Func1,  Func2);
-    double mathExp1 = Func1.mathexp();
-    double mathExp2 = Func2.mathexp();
-    double dispersion1 = Func1.dispersion();
-    double dispersion2 = Func2.dispersion();
-    double dispersionMixx = dispersionMix(Func1, Func2);
-    double assymetry1 = Func1.asymmetry();
-    double assymetry2 = Func2.asymmetry();
+double Mixture::asymmetryMix() {
+    double mathExpMix = mathexpMix();
+    double mathExp1 = s1.mathexp();
+    double mathExp2 = s2.mathexp();
+    double dispersion1 = s1.dispersion();
+    double dispersion2 = s2.dispersion();
+    double dispersionMixx = dispersionMix();
+    double assymetry1 = s1.asymmetry();
+    double assymetry2 = s2.asymmetry();
     double result = 1 / pow(dispersionMixx, 3 / 2) * (
         (1 - p) * (pow(mathExp1 - mathExpMix, 3) + 3 * (mathExp1 - mathExpMix) * dispersion1 + pow(dispersion1, 3/2)*assymetry1) +
         p * (pow(mathExp2 - mathExpMix, 3) + 3 * (mathExp2 - mathExpMix) * dispersion2 + pow(dispersion2, 3 / 2) * assymetry2)
@@ -100,17 +100,17 @@ double Mixture::asymmetryMix(Standart Func1, Standart Func2) {
 }
 
 //Эксцесс
-double Mixture::excesMix(Standart Func1, Standart Func2) {
-    double mathExpMix = mathexpMix(Func1, Func2);
-    double mathExp1 = Func1.mathexp();
-    double mathExp2 = Func2.mathexp();
-    double dispersion1 = Func1.dispersion();
-    double dispersion2 = Func2.dispersion();
-    double dispersionMixx = dispersionMix(Func1, Func2);
-    double assymetry1 = Func1.asymmetry();
-    double assymetry2 = Func2.asymmetry();
-    double exces1 = Func1.excess();
-    double exces2 = Func2.excess();
+double Mixture::excesMix() {
+    double mathExpMix = mathexpMix();
+    double mathExp1 = s1.mathexp();
+    double mathExp2 = s2.mathexp();
+    double dispersion1 = s1.dispersion();
+    double dispersion2 = s2.dispersion();
+    double dispersionMixx = dispersionMix();
+    double assymetry1 = s1.asymmetry();
+    double assymetry2 = s2.asymmetry();
+    double exces1 = s1.excess();
+    double exces2 = s2.excess();
     double result = 1 / pow(dispersionMixx, 2) * (
         (1 - p) * (pow(mathExp1 - mathExpMix, 4) + 6 * pow(mathExp1 - mathExpMix, 2) * dispersion1 + 4 * (mathExp1 - mathExpMix) *
             pow(dispersion1, 3 / 2) * assymetry1 + pow(dispersion1, 2) * (exces1 + 3)) +
@@ -121,13 +121,13 @@ double Mixture::excesMix(Standart Func1, Standart Func2) {
 }
 
 //Моделирование случайной величины
-double Mixture::generateMix(Standart Func) {
-    double r = Func.Rgenerate();
+double Mixture::generateMix() {
+    double r = s1.Rgenerate();
     double res;
     if (r > p)
-        res = Func.Xgenerate();
+        res = s1.Xgenerate();
     else
-        res = Func.Xgenerate();
+        res = s2.Xgenerate();
     return res;
 }
 

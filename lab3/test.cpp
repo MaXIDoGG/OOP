@@ -10,17 +10,17 @@ void testMix() {
     Func1 = Standart(0.5, 2, 1);
     Func2 = Standart(0.5, 2, 1);
     mix = Mixture(Func1, Func2, 0.5);
-    d = mix.densityMix(Func1, Func2, 0);
+    d = mix.densityMix(0);
     assert(fabs(d - 0.63662 < 0.001));
     cout << "f(x, v) = " << d << "\n";
-    m = mix.mathexpMix(Func1, Func2);
+    m = mix.mathexpMix();
     assert(fabs(m - 1 < 0.001));
     cout << "M(X) = " << m << "\n";
-    dis = mix.dispersionMix(Func1, Func2);
+    dis = mix.dispersionMix();
     assert(fabs(dis - 1 < 0.001));
     cout << "D(X) = " << dis << "\n";
-    a = mix.asymmetryMix(Func1, Func2);
-    e = mix.excesMix(Func1, Func2);
+    a = mix.asymmetryMix();
+    e = mix.excesMix();
     cout << e;
     assert(fabs(e - (-1) < 0.001));
     cout << "Y1 = " << a << "\n";
@@ -58,6 +58,8 @@ void testMix() {
         if(error == 1) cout << "Exception raised: false scale\n";
         if(error == 2) cout << "Exception raised: false form\n";
         if(error == 3) cout << "Exception raised: false param of mix\n";
+        if(error == 4) cout << "Exception raised: false param of size\n";
+        if(error == 5) cout << "Exception raised: false count of interals\n";
         exit(-1);
     }
     cout << "Save and load complete\n";
@@ -123,27 +125,67 @@ void testStandart() {
         if(error == 0) cout << "Exception raised: fstream I/O error\n";
         if(error == 1) cout << "Exception raised: false scale\n";
         if(error == 2) cout << "Exception raised: false form\n";
+        if(error == 3) cout << "Exception raised: false param of mix\n";
+        if(error == 4) cout << "Exception raised: false param of size\n";
+        if(error == 5) cout << "Exception raised: false count of interals\n";
         exit(-1);
     }
     cout << "Save and load complete\n";
     cout << "All tests are complete\n\n";
 }
 
-int empirical_test() {
+void empirical_test() {
     cout << "Testing the empirical distribution\n";
+    Standart Func1 = Standart(1, 2, 3);
+    Standart Func2 = Standart(4, 5, 6);
+    Mixture mix = Mixture(Func1, Func2, 0.5);
+    Empirical *emp;
     vector<double> sample = {1.123, 1.123, 2.345, 2.345, 3.1, 5.1, 7.8, 9.9, 1.2};
-    double d = empirical_density(5, sample);
-    double m = math_expectation(sample);
-    double dis = dispersion(sample);
-    double y1 = asymmetry(sample);
-    double y2 = EmpExcess(sample);
+    emp = new Empirical(sample);
+    cout << "Testing of standart functions:\n";
+    double d = emp->empirical_density(5);
+    double m = emp->math_expectation();
+    double dis = emp->dispersion();
+    double y1 = emp->asymmetry();
+    double y2 = emp->EmpExcess();
     assert(fabs(d - 17.316) < 0.01);
     assert(fabs(m - 3.78178) < 0.01);
     assert(fabs(dis - 8.96819) < 0.01);
     assert(fabs(y1 - 0.972817) < 0.01);
     assert(fabs(y2 - (-0.488406)) < 0.01);
-
     cout << "f(x) = " << d << "\nM(X) = " << m << "\nD(X) = " << dis << "\nY1 = " << y1 << "\nY2 = " << y2 << "\n";
+    cout << "\nTesting of constructors:\n";
+    try {
+        emp = new Empirical(Func1, 10, 10);
+        emp->~Empirical();
+        emp = new Empirical(mix, 10, 10);
+        emp->~Empirical();
+        emp = new Empirical(*emp);
+        emp->~Empirical();
+        emp = new Empirical(10, 10);
+        emp->~Empirical();
+    } catch(int error) {
+        if(error == 0) cout << "Exception raised: fstream I/O error\n";
+        if(error == 1) cout << "Exception raised: false scale\n";
+        if(error == 2) cout << "Exception raised: false form\n";
+        if(error == 3) cout << "Exception raised: false param of mix\n";
+        if(error == 4) cout << "Exception raised: false param of size\n";
+        if(error == 5) cout << "Exception raised: false count of interals\n";
+        exit(-1);
+    }
+    cout << "\nTest of save/load\nName of test file: txts/Stdtest2.txt\n";
+    try {
+        emp = new Empirical(10, 10);
+        emp->save("txts/empTest2.txt");
+        emp->load("txts/empTest2.txt");
+    } catch(int error) {
+        if(error == 0) cout << "Exception raised: fstream I/O error\n";
+        if(error == 1) cout << "Exception raised: false scale\n";
+        if(error == 2) cout << "Exception raised: false form\n";
+        if(error == 3) cout << "Exception raised: false param of mix\n";
+        if(error == 4) cout << "Exception raised: false param of size\n";
+        if(error == 5) cout << "Exception raised: false count of interals\n";
+        exit(-1);
+    }
     cout << "All tests are complete\n\n";
-    return 0;
 }

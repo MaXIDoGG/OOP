@@ -20,27 +20,27 @@ public:
     void setP(double newP);
 
     //Генерация выборки для смеси распределений
-    vector<double> random_sample_mix(Standart Func, int N);
+    vector<double> random_sample_mix(int N);
 
     //Вывод результата ф-ии плотности для смеси распределений в файл
-    void  result_to_file_mix(Standart Func1, Standart Func2, vector<double> sample);
+    void  result_to_file_mix(vector<double> sample);
 
     //Функция плотости
-    double densityMix(Standart Func1, Standart Func2, double x);
+    double densityMix(double x);
 
     //Математическое ожидание
-    double mathexpMix(Standart Func1, Standart Func2);
+    double mathexpMix();
 
     //Дисперсия
-    double dispersionMix(Standart Func1, Standart Func2);
+    double dispersionMix();
     //Асимметрия
-    double asymmetryMix(Standart Func1, Standart Func2);
+    double asymmetryMix();
 
     //Эксцесс
-    double excesMix(Standart Func1, Standart Func2);
+    double excesMix();
 
     //Моделирование случайной величины
-    double generateMix(Standart Func);
+    double generateMix();
 
     // Сохранение атрибутов в файл
     void save(string filename);
