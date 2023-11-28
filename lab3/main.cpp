@@ -271,6 +271,8 @@ int main() {
             mix.result_to_file_mix(emp->get_x_s());
             emp->result_to_file_empirical(0);
             emp->result_to_file_empirical(1);
+            emp->~Empirical();
+            emp = new Empirical(mix, n, interv);
             emp->result_to_file_empirical(2);
             emp->~Empirical();
             break;
