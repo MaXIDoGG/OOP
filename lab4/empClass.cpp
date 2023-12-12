@@ -2,22 +2,30 @@
 
 Empirical::Empirical(const IDistribution *d, int n0, int k0) : n(n0 > 1 ? n0 : throw 4), k(k0 > 2 ? k0 : (int)floor(log2(n0)) + 1) {
     x_s = d->generate_sample(n0);
+    sort(x_s.begin(), x_s.end());
 	f_s = generate_f_s();
-
+    for(int i = 0; i < x_s.size(); i++) {
+        d_s.push_back(d->density(x_s[i]));
+    }
 }
 
 Empirical::Empirical(int n0, int k0)  : n(n0 > 1 ? n0: throw 4), k(k0 > 2 ? k0 : (int)floor(log2(n0)) + 1) {
-    x_s = random_sample_simulation();
+    x_s = generate_sample(n0);
+    sort(x_s.begin(), x_s.end());
     f_s = generate_f_s();
+    sort(f_s.begin(), f_s.end());
 }
 
 Empirical::Empirical(vector<double> x_s)  : n(x_s.size()), k((int)floor(log2(x_s.size())) + 1) {
     this->x_s = x_s;
     f_s = generate_f_s();
+    sort(f_s.begin(), f_s.end());
 }
 
 Empirical::Empirical(ifstream &file) {
     load(file);
+    sort(x_s.begin(), x_s.end());
+    sort(f_s.begin(), f_s.end());
 }
 
 Empirical::~Empirical() {
@@ -39,7 +47,6 @@ Empirical& Empirical::operator=(const Empirical& emp)
 
 vector<double> Empirical::generate_f_s() const {
     vector<double> result;
-
 	for (const double& x: x_s)
 		result.push_back(density(x));
 
@@ -68,11 +75,6 @@ vector<double> Empirical::get_x_s() {
 
 vector<double> Empirical::get_f_s() {
     return f_s;
-}
-
-//ВЫвод результата ф-ии плотности эмпирического распределения в файл
-void Empirical::result_to_file(int mod) {
-    //Переделать
 }
 
 // Коэффициент Стерджесса
@@ -140,7 +142,7 @@ double Empirical::density(const double x) const {
 }
 
 // Мат. ожидание
-double Empirical::math_expectation() const {
+double Empirical::expexted_value() const {
     int n = int(x_s.size());
     double sum = 0;
     for (int i=0; i < n; i++) {
@@ -152,7 +154,7 @@ double Empirical::math_expectation() const {
 // Дисперсия
 double Empirical::varience() const {
     int n = int(x_s.size());
-    double M = math_expectation();
+    double M = expexted_value();
     double sum = 0;
     for (int i=0; i < n; i++) {
         sum += pow((x_s[i] - M), 2);
@@ -163,7 +165,7 @@ double Empirical::varience() const {
 // Коэффициент асимметрии
 double Empirical::asymmetry() const {
     int n = int(x_s.size());
-    double M = math_expectation();
+    double M = expexted_value();
     double D = varience();
     double sum = 0;
     for (int i=0; i < n; i++) {
@@ -176,7 +178,7 @@ double Empirical::asymmetry() const {
 // Коэффициент эксцесса
 double Empirical::kurtosis() const {
     int n = int(x_s.size());
-    double M = math_expectation();
+    double M = expexted_value();
     double D = varience();
     double sum = 0;
     for (int i=0; i < n; i++) {
@@ -187,7 +189,7 @@ double Empirical::kurtosis() const {
 }
 
 // Моделирование выборки
-vector<double> Empirical::random_sample_simulation() const {
+vector<double> Empirical::generate_sample(const int n) const {
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> dis(0, 1);
@@ -200,11 +202,10 @@ vector<double> Empirical::random_sample_simulation() const {
 }
 
 // Моделирование случайной величины
-double Empirical::random_var_simulation() const {
+double Empirical::rand_num() const {
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> dis(0, 1);
-
     double min_x = *min_element(x_s.begin(), x_s.end());
     double max_x = *max_element(x_s.begin(), x_s.end());
     double x = min_x + (max_x - min_x) * dis(gen);
@@ -212,9 +213,61 @@ double Empirical::random_var_simulation() const {
 }
 
 void Empirical::save(ofstream &file) {
-    //Переделать
+    string filename;
+    cout << "Enter a filename of x_s: ";
+    cin >> filename;
+
+    file.open("txts/" + filename);
+    if(!file.is_open())
+        throw 0;
+    for(int i = 0; i < x_s.size(); i++) file << x_s[i] << endl;
+    file.close();
+
+    cout << "Enter a filename of f_s: ";
+    cin >> filename;
+
+    file.open("txts/" + filename);
+    if(!file.is_open())
+        throw 0;
+    for(int i = 0; i < f_s.size(); i++) { 
+        file << f_s[i] << endl; 
+    }
+    file.close();
+
+    cout << "Enter a filename of d_s: ";
+    cin >> filename;
+
+    file.open("txts/" + filename);
+    if(!file.is_open())
+        throw 0;
+    for(int i = 0; i < d_s.size(); i++)  {
+        file << d_s[i] << endl;
+    }
+    file.close();
+
+    file.open("txts/empParams.txt");
+    if(!file.is_open())
+        throw 0;
+    file << n << endl << k;
+    file.close();
 }
 
 void Empirical::load(ifstream &file) {
-    //Переделать
+    x_s.clear();
+    double x;
+    string filename;
+    
+    file.open("txts/" + filename);
+    if(!file.is_open())
+        throw 0;
+
+    while(!file.eof()) {
+        file >> x;
+        x_s.push_back(x);
+    }
+    file.close();
+
+    n = x_s.size();
+    k = (int)floor(log2(n)) + 1;
+    f_s = generate_f_s();
 }

@@ -2,9 +2,10 @@
 
 // -- Реализация класса Standart --
 
-Standart::Standart(double v0=1, double lambda0=1, double u0=0) {
+Standart::Standart(double v0, double lambda0, double u0) {
     setForm(v0); setScale(lambda0); setShift(u0);
 }
+
 Standart::Standart(ifstream &file) {
     load(file);
 }
@@ -18,6 +19,7 @@ double Standart::density(double x) const {
 void Standart::setShift(double newU) {
     u = newU;
 }
+
 // Изменяет параметр масштаба
 void Standart::setScale(double newLambda) {
     lambda = newLambda != 0 ? newLambda : throw 1;
@@ -72,9 +74,8 @@ double Standart::Rgenerate() const {
     return dis(gen);
 }
 
-
 // Моделирование случайной величины
-double Standart::Xgenerate() const {
+double Standart::rand_num() const {
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> dis(0, 1);
@@ -85,35 +86,43 @@ double Standart::Xgenerate() const {
 }
 
 // Сохранение атрибутов в файл
-void Standart::save(ofstream &file) const {
-    //переделать
+void Standart::save(ofstream &file) {
+    string filename;
+    cout << "Enter a filename for Standart parameters: ";
+    cin >> filename;
+    file.open("txts/" + filename);
+    if (file.is_open())
+    {
+        file << u << "\n";
+        file << lambda << "\n";
+        file << v << "\n";
+    } else throw 0;
+    file.close();
 }
 // Загрузить атрибуты из файла
 void Standart::load(ifstream &file) {
-    //переделать
+    string filename;
+    cout << "Enter a filename for load: ";
+    cin >> filename;
+    double newU = 0, newLam = 0, newV = 0;
+    file.open("txts/" + filename);
+    if (file.is_open())
+    {
+        file >> newU;
+        setShift(newU);
+        file >> newLam;
+        setScale(newLam);
+        file >> newV;
+        setForm(newV);
+    } else throw 0;
+    file.close();
 }
 
 // Генерация выборки для стандартного распределения
-vector<double> Standart::random_sample(int N) const {
+vector<double> Standart::generate_sample(const int n) const {
     vector<double> sample;
-    for(int i = 0; i < N; i++) {
-        sample.push_back(Xgenerate());
+    for(int i = 0; i < n; i++) {
+        sample.push_back(rand_num());
     }
     return sample;
-}
-
-// Вывод значений ф-ии плотности по выборке в файл
-void Standart::result_to_file(vector<double> sample) const {
-    ofstream out, out2;
-    out.open("txts/Standart.txt"); 
-    out2.open("txts/StandartX.txt");
-    int i = 0;
-    sort(sample.begin(), sample.end());
-    while(sample[i]) {
-        out << density(sample[i]) << endl;
-        out2 << sample[i] << endl;
-        i++;
-    }
-    out.close();
-    cout << "File is ready\n";
-}
+} 

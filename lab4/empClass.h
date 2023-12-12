@@ -6,6 +6,7 @@ class Empirical : public IDistribution, public IPersistent
 private:
 	vector<double> x_s;
 	vector<double> f_s;
+    vector<double> d_s;
 	int n = 0;
 	int k = 0;
 public:
@@ -22,17 +23,17 @@ public:
     vector<double> get_f_s();
     Empirical& operator=(const Empirical& emp);
     vector<double> generate_f_s() const;
-    void result_to_file(int mod);
+    vector<double> generate_d_s() const;
     double delta_calc(const double min, const double max) const;
     vector<double> create_intervals(const double delta, const double min, const double max) const;
     int get_interval_index(const vector<double>& intervals, const double x) const;
-    double density(const double x) const;
-    double math_expectation() const;
-    double varience() const; 
-    double asymmetry() const;  
-    double kurtosis() const;
-    vector<double> random_sample_simulation() const;
-    double random_var_simulation() const;
-    void save(ofstream &file);
-    void load(ifstream &file);
+    double density(const double x) const override;
+    double expexted_value() const override;
+    double varience() const override; 
+    double asymmetry() const override;  
+    double kurtosis() const override;
+    vector<double> generate_sample(const int n) const override;
+    double rand_num() const override;
+    void save(ofstream &file) override;
+    void load(ifstream &file) override;
 };

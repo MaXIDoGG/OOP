@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <algorithm>
 #include <iomanip>
+#include <algorithm>
 #include <random>
 #include <cassert>
 #include <fstream>
